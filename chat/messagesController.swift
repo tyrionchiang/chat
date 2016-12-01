@@ -7,13 +7,16 @@
 //
 
 import UIKit
+import Firebase
 
 class messagesController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        
     }
     
     func handleLogout(){

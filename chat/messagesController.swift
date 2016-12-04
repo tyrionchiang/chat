@@ -17,9 +17,21 @@ class messagesController: UITableViewController {
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         
+        // user is not Logged in
+        if FIRAuth.auth()?.currentUser?.uid == nil{
+            performSelector(inBackground: #selector(handleLogout), with: nil)
+        }
+        
     }
     
     func handleLogout(){
+        
+        do {
+            try FIRAuth.auth()?.signOut()
+        } catch let logoutError {
+            print(logoutError)
+        }
+        
         
         let loginController = LoginController()
         present(loginController, animated: true, completion: nil)

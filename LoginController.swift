@@ -30,10 +30,39 @@ class LoginController: UIViewController {
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleLoginRegister), for: .touchUpInside)
         
         return button
     }()
+    
+    func handleLoginRegister(){
+        
+        self.activityIncidatorViewStartAnimating()
+        
+        if loginRegisterSegmentControl.selectedSegmentIndex == 0{
+            handleLogin()
+        }else{
+            handleRegister()
+        }
+    }
+    
+    
+    func handleLogin(){
+        guard let email = emailTextField.text, let password = passwordTextField.text else {
+            print("Form is not value")
+            return
+        }
+        FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
+            if error != nil {
+                print(error!)
+                return
+            }
+            
+            self.dismiss(animated: true, completion: nil)
+
+        })
+    }
+    
     
     func handleRegister(){
         
@@ -64,11 +93,11 @@ class LoginController: UIViewController {
                 }
             })
             
-            print("Saved user successfully into Firebass db")
+            self.dismiss(animated: true, completion: nil)
 
-            
         })
     }
+    
     
     let titleUILabel : UILabel = {
         let label = UILabel()
@@ -174,6 +203,8 @@ class LoginController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.hideKeyboardWhenTappedAround()
+        self.activityIncidatorViewStartAnimating()
 
         view.backgroundColor = UIColor.darkGray
         
@@ -186,6 +217,7 @@ class LoginController: UIViewController {
         view.addSubview(loginRegisterSegmentControl)
         
         
+        
         setupInputsContainerView()
         setupLoginRegisterButton()
         setupProfileImageView()
@@ -194,6 +226,7 @@ class LoginController: UIViewController {
         setupLoginReisterSegmentControl()
         
     }
+    
     
     func setupLoginReisterSegmentControl(){
         //ned x, y, width, height constraints
@@ -236,7 +269,7 @@ class LoginController: UIViewController {
         //ned x, y, width, height constraints
         
         inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 37).isActive = true
         inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24).isActive = true
         inpputsContainerViewHeightAnchor = inputsContainerView.heightAnchor.constraint(equalToConstant: 100)
         inpputsContainerViewHeightAnchor?.isActive = true

@@ -25,18 +25,5 @@ extension UIViewController {
         view.endEditing(true)
     }
     
-    func activityIncidatorViewStartAnimating(){
-        
-        let activityIncidatorView : UIActivityIndicatorView = {
-            let aiv = UIActivityIndicatorView()
-            aiv.hidesWhenStopped = true
-            aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
-            return aiv
-        }()
-        
-        view.addSubview(activityIncidatorView)
-        activityIncidatorView.center = view.center
-        activityIncidatorView.startAnimating()
-    }
 
 }

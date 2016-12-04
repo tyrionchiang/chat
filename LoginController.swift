@@ -37,8 +37,8 @@ class LoginController: UIViewController {
     
     func handleLoginRegister(){
         
-        self.activityIncidatorViewStartAnimating()
-        
+        self.activityIncidatorViewAnimating(animated: true)
+
         if loginRegisterSegmentControl.selectedSegmentIndex == 0{
             handleLogin()
         }else{
@@ -55,9 +55,11 @@ class LoginController: UIViewController {
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
             if error != nil {
                 print(error!)
+                self.activityIncidatorViewAnimating(animated: false)
                 return
             }
             
+            self.activityIncidatorViewAnimating(animated: false)
             self.dismiss(animated: true, completion: nil)
 
         })
@@ -74,6 +76,7 @@ class LoginController: UIViewController {
         FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user : FIRUser?, error) in
             if error != nil{
                 print(error!)
+                self.activityIncidatorViewAnimating(animated: false)
                 return
             }
             
@@ -89,10 +92,12 @@ class LoginController: UIViewController {
             usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
                 if err != nil{
                     print(err!)
+                    self.activityIncidatorViewAnimating(animated: false)
                     return
                 }
             })
             
+            self.activityIncidatorViewAnimating(animated: false)
             self.dismiss(animated: true, completion: nil)
 
         })
@@ -200,11 +205,30 @@ class LoginController: UIViewController {
         titleUILabelHeightAnchor?.constant = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 150 : 0
 
     }
+    
+    let activityIncidatorView : UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView()
+        aiv.hidesWhenStopped = true
+        aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        return aiv
+    }()
+    func activityIncidatorViewAnimating( animated : Bool ){
+        
+        if(animated){
+            view.addSubview(activityIncidatorView)
+            activityIncidatorView.center = view.center
+            activityIncidatorView.startAnimating()
+            UIApplication.shared.beginIgnoringInteractionEvents()
+        }else{
+            activityIncidatorView.stopAnimating()
+            UIApplication.shared.endIgnoringInteractionEvents()
+        }
+    }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
-        self.activityIncidatorViewStartAnimating()
 
         view.backgroundColor = UIColor.darkGray
         

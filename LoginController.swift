@@ -66,43 +66,6 @@ class LoginController: UIViewController {
     }
     
     
-    func handleRegister(){
-        
-        guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
-            print("Form is not valid")
-            return
-        }
-        
-        FIRAuth.auth()?.createUser(withEmail: email, password: password, completion: { (user : FIRUser?, error) in
-            if error != nil{
-                print(error!)
-                self.activityIncidatorViewAnimating(animated: false)
-                return
-            }
-            
-            
-            guard let uid = user?.uid else{
-                return
-            }
-            
-            //Successfully authenticated user
-            let ref = FIRDatabase.database().reference(fromURL: "https://chat-27ea3.firebaseio.com/")
-            let usersReference = ref.child("users").child(uid)
-            let values = ["name" : name, "email" : email]
-            usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
-                if err != nil{
-                    print(err!)
-                    self.activityIncidatorViewAnimating(animated: false)
-                    return
-                }
-            })
-            
-            self.activityIncidatorViewAnimating(animated: false)
-            self.dismiss(animated: true, completion: nil)
-
-        })
-    }
-    
     
     let titleUILabel : UILabel = {
         let label = UILabel()

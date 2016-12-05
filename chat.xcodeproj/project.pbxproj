@@ -10,11 +10,12 @@
 		6462EFB5C1F5942FF404CED0 /* Pods_chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7096AFB3A1878C09900A65 /* Pods_chat.framework */; };
 		860D7DE11DE97AD400769E6D /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860D7DE01DE97AD400769E6D /* LoginController.swift */; };
 		860D7DE41DE97BA000769E6D /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860D7DE31DE97BA000769E6D /* extension.swift */; };
+		8613DE451DF5203B00CA21A2 /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613DE441DF5203B00CA21A2 /* NewMessageController.swift */; };
+		8613DE481DF52BA600CA21A2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613DE471DF52BA600CA21A2 /* User.swift */; };
 		86A5CD781DEEBDFC00CCE842 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86A5CD771DEEBDFC00CCE842 /* GoogleService-Info.plist */; };
 		86AC58FA1DED2209004BEFC2 /* fina_font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58F91DED2209004BEFC2 /* fina_font.ttf */; };
 		86AC58FD1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */; };
 		86AC59001DED2BD6004BEFC2 /* Monthoers.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */; };
-		86AC59041DEDB242004BEFC2 /* profileImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 86AC59031DEDB242004BEFC2 /* profileImage.png */; };
 		86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */; };
 		86FC5CF41DE722EA003D96A1 /* messagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF31DE722EA003D96A1 /* messagesController.swift */; };
 		86FC5CF71DE722EA003D96A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CF51DE722EA003D96A1 /* Main.storyboard */; };
@@ -26,11 +27,12 @@
 		7D7096AFB3A1878C09900A65 /* Pods_chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		860D7DE01DE97AD400769E6D /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginController.swift; path = ../LoginController.swift; sourceTree = "<group>"; };
 		860D7DE31DE97BA000769E6D /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = extension.swift; path = ../extension.swift; sourceTree = "<group>"; };
+		8613DE441DF5203B00CA21A2 /* NewMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
+		8613DE471DF52BA600CA21A2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		86A5CD771DEEBDFC00CCE842 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		86AC58F91DED2209004BEFC2 /* fina_font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fina_font.ttf; sourceTree = "<group>"; };
 		86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZefaniStencil-Regular.otf"; sourceTree = "<group>"; };
 		86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Monthoers.otf; sourceTree = "<group>"; };
-		86AC59031DEDB242004BEFC2 /* profileImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = profileImage.png; sourceTree = "<group>"; };
 		86FC5CEE1DE722EA003D96A1 /* chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86FC5CF31DE722EA003D96A1 /* messagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messagesController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,14 @@
 			name = "supporting File";
 			sourceTree = "<group>";
 		};
+		8613DE461DF52B6000CA21A2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				8613DE471DF52BA600CA21A2 /* User.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		86AC59011DED2BDE004BEFC2 /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -74,14 +84,6 @@
 				86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */,
 			);
 			name = font;
-			sourceTree = "<group>";
-		};
-		86AC59021DEDB137004BEFC2 /* image */ = {
-			isa = PBXGroup;
-			children = (
-				86AC59031DEDB242004BEFC2 /* profileImage.png */,
-			);
-			name = image;
 			sourceTree = "<group>";
 		};
 		86FC5CE51DE722EA003D96A1 = {
@@ -105,11 +107,12 @@
 		86FC5CF01DE722EA003D96A1 /* chat */ = {
 			isa = PBXGroup;
 			children = (
-				86AC59021DEDB137004BEFC2 /* image */,
+				8613DE461DF52B6000CA21A2 /* Model */,
 				860D7DE21DE97B5500769E6D /* supporting File */,
 				86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */,
 				86FC5CF31DE722EA003D96A1 /* messagesController.swift */,
 				860D7DE01DE97AD400769E6D /* LoginController.swift */,
+				8613DE441DF5203B00CA21A2 /* NewMessageController.swift */,
 				860D7DE31DE97BA000769E6D /* extension.swift */,
 				86FC5CF81DE722EA003D96A1 /* Assets.xcassets */,
 			);
@@ -199,7 +202,6 @@
 				86AC58FD1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf in Resources */,
 				86A5CD781DEEBDFC00CCE842 /* GoogleService-Info.plist in Resources */,
 				86FC5CFC1DE722EA003D96A1 /* LaunchScreen.storyboard in Resources */,
-				86AC59041DEDB242004BEFC2 /* profileImage.png in Resources */,
 				86AC58FA1DED2209004BEFC2 /* fina_font.ttf in Resources */,
 				86FC5CF91DE722EA003D96A1 /* Assets.xcassets in Resources */,
 				86FC5CF71DE722EA003D96A1 /* Main.storyboard in Resources */,
@@ -263,6 +265,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				860D7DE11DE97AD400769E6D /* LoginController.swift in Sources */,
+				8613DE451DF5203B00CA21A2 /* NewMessageController.swift in Sources */,
+				8613DE481DF52BA600CA21A2 /* User.swift in Sources */,
 				86FC5CF41DE722EA003D96A1 /* messagesController.swift in Sources */,
 				86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */,
 				860D7DE41DE97BA000769E6D /* extension.swift in Sources */,

@@ -151,7 +151,7 @@ class LoginController: UIViewController {
         return tf
     }()
     
-    let profileImageView : UIImageView = {
+    lazy var profileImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = UIColor.white
         imageView.image = UIImage(named: "profileImage")?.withRenderingMode(.alwaysTemplate)
@@ -160,8 +160,13 @@ class LoginController: UIViewController {
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 75
         imageView.layer.masksToBounds = true
+        
+        imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
+        imageView.isUserInteractionEnabled = true
+        
         return imageView
     }()
+    
     
     lazy var loginRegisterSegmentControl: UISegmentedControl = {
         let sc = UISegmentedControl(items : ["Login", "Register"])

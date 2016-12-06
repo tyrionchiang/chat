@@ -42,6 +42,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                     
                     if error != nil{
                         print(error!)
+                        self.activityIncidatorViewAnimating(animated: false)
                         return
                     }
                     
@@ -50,10 +51,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                         let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
                         
                         self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject])
-
-
                     }
-                    
                     
                     print(metadata!)
                     
@@ -62,11 +60,6 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             }
             
             
-            
-            
-            
-            self.activityIncidatorViewAnimating(animated: false)
-
         })
     }
     
@@ -80,7 +73,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                 self.activityIncidatorViewAnimating(animated: false)
                 return
             }
-            
+            self.activityIncidatorViewAnimating(animated: false)
             self.dismiss(animated: true, completion: nil)
         })
     }

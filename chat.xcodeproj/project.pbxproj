@@ -78,6 +78,14 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
+		8648494C1DF6D0600050F416 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				860D7DE31DE97BA000769E6D /* extension.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
 		86AC59011DED2BDE004BEFC2 /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -109,15 +117,15 @@
 		86FC5CF01DE722EA003D96A1 /* chat */ = {
 			isa = PBXGroup;
 			children = (
+				8648494C1DF6D0600050F416 /* Helpers */,
 				8613DE461DF52B6000CA21A2 /* Model */,
-				860D7DE21DE97B5500769E6D /* supporting File */,
 				86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */,
 				86FC5CF31DE722EA003D96A1 /* messagesController.swift */,
 				860D7DE01DE97AD400769E6D /* LoginController.swift */,
 				86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */,
 				8613DE441DF5203B00CA21A2 /* NewMessageController.swift */,
-				860D7DE31DE97BA000769E6D /* extension.swift */,
 				86FC5CF81DE722EA003D96A1 /* Assets.xcassets */,
+				860D7DE21DE97B5500769E6D /* supporting File */,
 			);
 			path = chat;
 			sourceTree = "<group>";

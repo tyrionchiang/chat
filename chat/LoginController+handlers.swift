@@ -75,7 +75,11 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             }
             
 //            self.messagesController?.fetchUserAndSetupNavBarTitle()
-            self.messagesController?.navigationItem.title = values["name"] as? String
+//            self.messagesController?.navigationItem.title = values["name"] as? String
+            let user = User()
+            //this setter potentially crashes if keys don't match
+            user.setValuesForKeys(values)
+            self.messagesController?.setupNavBarWithUser(user: user)
 
             
             self.activityIncidatorViewAnimating(animated: false)

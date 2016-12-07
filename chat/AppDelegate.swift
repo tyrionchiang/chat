@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: messagesController())
+        window?.rootViewController = UINavigationController(rootViewController: MessagesController())
         // Override point for customization after application launch.
         
         FIRApp.configure()

@@ -18,7 +18,7 @@
 		86AC59001DED2BD6004BEFC2 /* Monthoers.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */; };
 		86E8553F1DF568DE006B1A2F /* LoginController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */; };
 		86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */; };
-		86FC5CF41DE722EA003D96A1 /* messagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF31DE722EA003D96A1 /* messagesController.swift */; };
+		86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF31DE722EA003D96A1 /* MessagesController.swift */; };
 		86FC5CF71DE722EA003D96A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CF51DE722EA003D96A1 /* Main.storyboard */; };
 		86FC5CF91DE722EA003D96A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CF81DE722EA003D96A1 /* Assets.xcassets */; };
 		86FC5CFC1DE722EA003D96A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CFA1DE722EA003D96A1 /* LaunchScreen.storyboard */; };
@@ -37,7 +37,7 @@
 		86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginController+handlers.swift"; sourceTree = "<group>"; };
 		86FC5CEE1DE722EA003D96A1 /* chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		86FC5CF31DE722EA003D96A1 /* messagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = messagesController.swift; sourceTree = "<group>"; };
+		86FC5CF31DE722EA003D96A1 /* MessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
 		86FC5CF61DE722EA003D96A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		86FC5CF81DE722EA003D96A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		86FC5CFB1DE722EA003D96A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -120,7 +120,7 @@
 				8648494C1DF6D0600050F416 /* Helpers */,
 				8613DE461DF52B6000CA21A2 /* Model */,
 				86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */,
-				86FC5CF31DE722EA003D96A1 /* messagesController.swift */,
+				86FC5CF31DE722EA003D96A1 /* MessagesController.swift */,
 				860D7DE01DE97AD400769E6D /* LoginController.swift */,
 				86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */,
 				8613DE441DF5203B00CA21A2 /* NewMessageController.swift */,
@@ -278,7 +278,7 @@
 				860D7DE11DE97AD400769E6D /* LoginController.swift in Sources */,
 				8613DE451DF5203B00CA21A2 /* NewMessageController.swift in Sources */,
 				8613DE481DF52BA600CA21A2 /* User.swift in Sources */,
-				86FC5CF41DE722EA003D96A1 /* messagesController.swift in Sources */,
+				86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */,
 				86E8553F1DF568DE006B1A2F /* LoginController+handlers.swift in Sources */,
 				86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */,
 				860D7DE41DE97BA000769E6D /* extension.swift in Sources */,

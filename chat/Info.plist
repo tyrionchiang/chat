@@ -25,9 +25,9 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>armv7</string>
-		<string>fina_font</string>
-		<string>Monthoers</string>
-		<string>ZefaniStencil-Regular</string>
+		<string>fina_font.ttf</string>
+		<string>Monthoers.otf</string>
+		<string>ZefaniStencil-Regular.otf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

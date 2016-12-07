@@ -12,6 +12,8 @@ import Firebase
 
 class LoginController: UIViewController {
     
+    var messagesController : messagesController?
+    
     let inputsContainerView : UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -59,6 +61,9 @@ class LoginController: UIViewController {
                 self.activityIncidatorViewAnimating(animated: false)
                 return
             }
+            
+            //successfully logged in our user
+            self.messagesController?.fetchUserAndSetupNavBarTitle()
             
             self.activityIncidatorViewAnimating(animated: false)
             self.dismiss(animated: true, completion: nil)

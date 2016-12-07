@@ -73,6 +73,11 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                 self.activityIncidatorViewAnimating(animated: false)
                 return
             }
+            
+//            self.messagesController?.fetchUserAndSetupNavBarTitle()
+            self.messagesController?.navigationItem.title = values["name"] as? String
+
+            
             self.activityIncidatorViewAnimating(animated: false)
             self.dismiss(animated: true, completion: nil)
         })
@@ -123,21 +128,21 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         
         if originalImgSize>1500 {
             
-            zipImageData = UIImageJPEGRepresentation(image,0.2)!
+            zipImageData = UIImageJPEGRepresentation(image,0.1)!
             
         }else if originalImgSize>600 {
             
-            zipImageData = UIImageJPEGRepresentation(image,0.4)!
+            zipImageData = UIImageJPEGRepresentation(image,0.3)!
         }else if originalImgSize>400 {
             
-            zipImageData = UIImageJPEGRepresentation(image,0.6)!
+            zipImageData = UIImageJPEGRepresentation(image,0.5)!
             
         }else if originalImgSize>300 {
             
-            zipImageData = UIImageJPEGRepresentation(image,0.7)!
+            zipImageData = UIImageJPEGRepresentation(image,0.6)!
         }else if originalImgSize>200 {
             
-            zipImageData = UIImageJPEGRepresentation(image,0.8)!
+            zipImageData = UIImageJPEGRepresentation(image,0.7)!
         }
         
         return zipImageData as Data?

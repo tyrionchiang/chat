@@ -29,6 +29,7 @@ extension UIViewController {
 }
 
 
+//image Cache
 
 let imageCache = NSCache<AnyObject, AnyObject>()
 
@@ -70,3 +71,6 @@ extension UIImageView{
 
     }
 }
+
+//resize & zip Image
+

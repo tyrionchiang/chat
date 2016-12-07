@@ -34,9 +34,9 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             
             //Successfully authenticated user
             let imageName = NSUUID().uuidString
-            let storageRef = FIRStorage.storage().reference().child("\(imageName).png")
+            let storageRef = FIRStorage.storage().reference().child("\(imageName).jpg")
             
-            if let uploadData = UIImagePNGRepresentation(self.profileImageView.image!){
+            if let uploadData = self.compressImageSize(image: self.profileImageView.image!){
                 
                 storageRef.put(uploadData, metadata: nil, completion: { (metadata, error) in
                     
@@ -112,6 +112,36 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         dismiss(animated: true, completion: nil)
     }
     
+
+    
+    //图片压缩 1000kb以下的图片控制在100kb-200kb之间
+    func compressImageSize(image:UIImage) -> Data?{
+        
+        var zipImageData = UIImageJPEGRepresentation(image, 1.0)!
+        let originalImgSize = zipImageData.count/1024 as Int  //获取图片大小
+        print("原始大小: \(originalImgSize)")
+        
+        if originalImgSize>1500 {
+            
+            zipImageData = UIImageJPEGRepresentation(image,0.2)!
+            
+        }else if originalImgSize>600 {
+            
+            zipImageData = UIImageJPEGRepresentation(image,0.4)!
+        }else if originalImgSize>400 {
+            
+            zipImageData = UIImageJPEGRepresentation(image,0.6)!
+            
+        }else if originalImgSize>300 {
+            
+            zipImageData = UIImageJPEGRepresentation(image,0.7)!
+        }else if originalImgSize>200 {
+            
+            zipImageData = UIImageJPEGRepresentation(image,0.8)!
+        }
+        
+        return zipImageData as Data?
+    }
 
 
 }

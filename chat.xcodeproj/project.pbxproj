@@ -14,6 +14,7 @@
 		8613DE481DF52BA600CA21A2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613DE471DF52BA600CA21A2 /* User.swift */; };
 		8646CD8E1DFD9A7300D169B3 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8646CD8D1DFD9A7300D169B3 /* Message.swift */; };
 		8660059E1DF9439F00189F17 /* ChatLogController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8660059D1DF9439F00189F17 /* ChatLogController.swift */; };
+		86A119D31DFE760100D960D2 /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86A119D21DFE760100D960D2 /* UserCell.swift */; };
 		86A5CD781DEEBDFC00CCE842 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 86A5CD771DEEBDFC00CCE842 /* GoogleService-Info.plist */; };
 		86AC58FA1DED2209004BEFC2 /* fina_font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58F91DED2209004BEFC2 /* fina_font.ttf */; };
 		86AC58FD1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */; };
@@ -34,6 +35,7 @@
 		8613DE471DF52BA600CA21A2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8646CD8D1DFD9A7300D169B3 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		8660059D1DF9439F00189F17 /* ChatLogController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatLogController.swift; sourceTree = "<group>"; };
+		86A119D21DFE760100D960D2 /* UserCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		86A5CD771DEEBDFC00CCE842 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		86AC58F91DED2209004BEFC2 /* fina_font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fina_font.ttf; sourceTree = "<group>"; };
 		86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZefaniStencil-Regular.otf"; sourceTree = "<group>"; };
@@ -103,6 +105,14 @@
 			name = Controller;
 			sourceTree = "<group>";
 		};
+		86A119D11DFE75B600D960D2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				86A119D21DFE760100D960D2 /* UserCell.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
 		86AC59011DED2BDE004BEFC2 /* font */ = {
 			isa = PBXGroup;
 			children = (
@@ -134,6 +144,7 @@
 		86FC5CF01DE722EA003D96A1 /* chat */ = {
 			isa = PBXGroup;
 			children = (
+				86A119D11DFE75B600D960D2 /* View */,
 				8648494C1DF6D0600050F416 /* Helpers */,
 				8613DE461DF52B6000CA21A2 /* Model */,
 				8660059C1DF9432300189F17 /* Controller */,
@@ -297,6 +308,7 @@
 				86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */,
 				86E8553F1DF568DE006B1A2F /* LoginController+handlers.swift in Sources */,
 				86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */,
+				86A119D31DFE760100D960D2 /* UserCell.swift in Sources */,
 				860D7DE41DE97BA000769E6D /* extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

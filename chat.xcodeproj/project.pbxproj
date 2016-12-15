@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6462EFB5C1F5942FF404CED0 /* Pods_chat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D7096AFB3A1878C09900A65 /* Pods_chat.framework */; };
-		860D7DE11DE97AD400769E6D /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860D7DE01DE97AD400769E6D /* LoginController.swift */; };
-		860D7DE41DE97BA000769E6D /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 860D7DE31DE97BA000769E6D /* extension.swift */; };
 		8613DE451DF5203B00CA21A2 /* NewMessageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613DE441DF5203B00CA21A2 /* NewMessageController.swift */; };
 		8613DE481DF52BA600CA21A2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8613DE471DF52BA600CA21A2 /* User.swift */; };
 		8646CD8E1DFD9A7300D169B3 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8646CD8D1DFD9A7300D169B3 /* Message.swift */; };
@@ -20,6 +18,8 @@
 		86AC58FA1DED2209004BEFC2 /* fina_font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58F91DED2209004BEFC2 /* fina_font.ttf */; };
 		86AC58FD1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */; };
 		86AC59001DED2BD6004BEFC2 /* Monthoers.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */; };
+		86BF30841E02CD16008C4367 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BF30831E02CD16008C4367 /* extension.swift */; };
+		86BF30861E02CD29008C4367 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BF30851E02CD29008C4367 /* LoginController.swift */; };
 		86E8553F1DF568DE006B1A2F /* LoginController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */; };
 		86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */; };
 		86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF31DE722EA003D96A1 /* MessagesController.swift */; };
@@ -30,8 +30,6 @@
 
 /* Begin PBXFileReference section */
 		7D7096AFB3A1878C09900A65 /* Pods_chat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_chat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		860D7DE01DE97AD400769E6D /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginController.swift; path = ../LoginController.swift; sourceTree = "<group>"; };
-		860D7DE31DE97BA000769E6D /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = extension.swift; path = ../extension.swift; sourceTree = "<group>"; };
 		8613DE441DF5203B00CA21A2 /* NewMessageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageController.swift; sourceTree = "<group>"; };
 		8613DE471DF52BA600CA21A2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		8646CD8D1DFD9A7300D169B3 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -42,6 +40,8 @@
 		86AC58F91DED2209004BEFC2 /* fina_font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fina_font.ttf; sourceTree = "<group>"; };
 		86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZefaniStencil-Regular.otf"; sourceTree = "<group>"; };
 		86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Monthoers.otf; sourceTree = "<group>"; };
+		86BF30831E02CD16008C4367 /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
+		86BF30851E02CD29008C4367 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginController+handlers.swift"; sourceTree = "<group>"; };
 		86FC5CEE1DE722EA003D96A1 /* chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 		8648494C1DF6D0600050F416 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				860D7DE31DE97BA000769E6D /* extension.swift */,
+				86BF30831E02CD16008C4367 /* extension.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -99,7 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				86FC5CF31DE722EA003D96A1 /* MessagesController.swift */,
-				860D7DE01DE97AD400769E6D /* LoginController.swift */,
+				86BF30851E02CD29008C4367 /* LoginController.swift */,
 				86E8553E1DF568DE006B1A2F /* LoginController+handlers.swift */,
 				8613DE441DF5203B00CA21A2 /* NewMessageController.swift */,
 				8660059D1DF9439F00189F17 /* ChatLogController.swift */,
@@ -303,17 +303,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86BF30861E02CD29008C4367 /* LoginController.swift in Sources */,
 				8660059E1DF9439F00189F17 /* ChatLogController.swift in Sources */,
-				860D7DE11DE97AD400769E6D /* LoginController.swift in Sources */,
 				8613DE451DF5203B00CA21A2 /* NewMessageController.swift in Sources */,
 				8646CD8E1DFD9A7300D169B3 /* Message.swift in Sources */,
+				86BF30841E02CD16008C4367 /* extension.swift in Sources */,
 				8613DE481DF52BA600CA21A2 /* User.swift in Sources */,
 				86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */,
 				86E8553F1DF568DE006B1A2F /* LoginController+handlers.swift in Sources */,
 				8659A9321E00240E0064845B /* ChatMessageCell.swift in Sources */,
 				86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */,
 				86A119D31DFE760100D960D2 /* UserCell.swift in Sources */,
-				860D7DE41DE97BA000769E6D /* extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -218,7 +218,10 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         
         //get estimated height somehow??
         if let text = messages[indexPath.item].text{
-            height = estimateFrameForText(text: text).height + 20
+            height = estimateFrameForText(text: text).height
+            if height < 36 {
+                height = 36
+            }
         }
         
         let width = UIScreen.main.bounds.width

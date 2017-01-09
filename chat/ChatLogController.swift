@@ -218,13 +218,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         
         //get estimated height somehow??
         if let text = messages[indexPath.item].text{
-            height = estimateFrameForText(text: text).height
-            if height < 37{
-                height = 36
-            }else if height < 70{
-                height = 56
-            }
-            print(height)
+            height = estimateFrameForText(text: text).height + 20
         }
         
         let width = UIScreen.main.bounds.width
@@ -233,7 +227,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
     
     private func estimateFrameForText(text: String) -> CGRect{
         
-        let size = CGSize(width: 200, height: 1000)
+        let size = CGSize(width: 190, height: 1000)
         let options = NSStringDrawingOptions.usesFontLeading.union(.usesLineFragmentOrigin)
         
         return NSString(string: text).boundingRect(with: size, options: options, attributes: [NSFontAttributeName: UIFont.systemFont(ofSize: 16)], context: nil)

@@ -21,9 +21,14 @@ class UserCell:UITableViewCell{
             
             if let seconds = message?.timestamp?.doubleValue{
                 let timestampDate = Date(timeIntervalSince1970: seconds)
+                let today = Double(Date().timeIntervalSince1970)
                 
                 let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "h:mm a"
+                if today - seconds < 60*60*24{
+                    dateFormatter.dateFormat = "h:mm a"
+                }else{
+                    dateFormatter.dateFormat = "DD/MM/YYYY"
+                }
                 timeLabel.text = dateFormatter.string(from: timestampDate)
 
             }

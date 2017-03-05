@@ -16,15 +16,15 @@ class ChatMessageCell: UICollectionViewCell {
         tv.font = UIFont.systemFont(ofSize: 16)
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.backgroundColor = UIColor.clear
-        tv.textColor = UIColor.white
+        tv.textColor = UIColor(r: 92, g: 103, b: 115)
         return tv
     }()
     
-    static let blueColor = UIColor(r: 0, g: 137, b: 249)
+    static let mainColor = UIColor(r: 184, g: 153, b: 129)
     
     let bubbleView: UIView = {
         let view = UIView()
-        view.backgroundColor = blueColor
+        view.backgroundColor = mainColor
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false

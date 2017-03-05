@@ -15,7 +15,7 @@ class LoginController: UIViewController {
     
     let inputsContainerView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = UIColor.darkGray
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 5
         view.layer.masksToBounds = true
@@ -24,11 +24,11 @@ class LoginController: UIViewController {
     
     lazy var loginRegisterButton : UIButton = {
         let button = UIButton()
-        button.backgroundColor = UIColor.gray
+        button.backgroundColor = ChatMessageCell.mainColor
         button.setTitle("Login", for: .normal)
         button.layer.cornerRadius = 5
         button.layer.masksToBounds = true
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(whitColor, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
         
@@ -76,44 +76,53 @@ class LoginController: UIViewController {
         let label = UILabel()
         label.text = "CHAT"
         label.font = UIFont(name: "SwistblnkMonthoers", size: 98)
-        label.textColor = UIColor.white
+        label.textColor = whitColor
         label.textAlignment = NSTextAlignment.center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
+    static let whitColor = UIColor(r: 245, g: 245, b: 245)
+    static let TextFieldColor = UIColor(r: 111, g: 120, b: 126)
     
     let nameTextField : UITextField = {
        let tf = UITextField()
-        tf.placeholder = ""
+        tf.tintColor = whitColor
+        tf.textColor = whitColor
+//        tf.placeholder = ""
+        tf.attributedPlaceholder = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: TextFieldColor])
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     
     let nameSeparatorView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 220, g: 220, b: 220)
+        view.backgroundColor = TextFieldColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     let emailTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Email Address"
+        tf.tintColor = whitColor
+        tf.textColor = whitColor
+        tf.attributedPlaceholder = NSAttributedString(string: "Email Address", attributes: [NSForegroundColorAttributeName: TextFieldColor])
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     
     let emailSeparatorView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(r: 220, g: 220, b: 220)
+        view.backgroundColor = TextFieldColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     let passwordTextField : UITextField = {
         let tf = UITextField()
-        tf.placeholder = "Password"
+        tf.tintColor = whitColor
+        tf.textColor = whitColor
+        tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: TextFieldColor])
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.isSecureTextEntry = true
         return tf
@@ -121,7 +130,7 @@ class LoginController: UIViewController {
     
     lazy var profileImageView : UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.white
+        imageView.backgroundColor = whitColor
         imageView.image = UIImage(named: "profileImage")?.withRenderingMode(.alwaysTemplate)
         imageView.tintColor = UIColor(white: 0.75, alpha: 1)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -138,7 +147,8 @@ class LoginController: UIViewController {
     
     lazy var loginRegisterSegmentControl: UISegmentedControl = {
         let sc = UISegmentedControl(items : ["Login", "Register"])
-        sc.tintColor = UIColor.white
+        sc.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor(r: 161, g: 170, b: 176)], for: UIControlState.selected)
+        sc.tintColor = UIColor.darkGray
         sc.selectedSegmentIndex = 0
         sc.translatesAutoresizingMaskIntoConstraints = false
         sc.addTarget(self, action: #selector(handleLoginReisterChange), for: .valueChanged)
@@ -155,7 +165,8 @@ class LoginController: UIViewController {
         //Change hight of nameTextField
         nameTextFieldHeightAnchor?.isActive = false
         nameTextFieldHeightAnchor = nameTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 0 : 1/3)
-        nameTextField.placeholder = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? "" : "Name"
+//        nameTextField.placeholder = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? "" : "Name"
+        nameTextField.attributedPlaceholder = NSAttributedString(string: loginRegisterSegmentControl.selectedSegmentIndex == 0 ? "" : "Name", attributes: [NSForegroundColorAttributeName: LoginController.TextFieldColor])
         nameTextField.text = ""
         nameTextFieldHeightAnchor?.isActive = true
         
@@ -203,7 +214,7 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
 
-        view.backgroundColor = UIColor.darkGray
+        view.backgroundColor = UIColor(r: 51, g: 51, b: 51)
         
         
         view.addSubview(inputsContainerView)

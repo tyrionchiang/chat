@@ -53,6 +53,8 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
     lazy var inputTextField : UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."
+        textField.tintColor = UIColor(r: 92, g: 103, b: 115)
+        textField.textColor = UIColor(r: 92, g: 103, b: 115)
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.delegate = self
         return textField
@@ -62,8 +64,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
+                
         collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
         collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         collectionView?.alwaysBounceVertical = true
@@ -85,6 +86,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         
         let sendButton = UIButton(type: .system)
         sendButton.setTitle("Send", for: .normal)
+        sendButton.tintColor = ChatMessageCell.mainColor
         sendButton.translatesAutoresizingMaskIntoConstraints = false
         sendButton.addTarget(self, action: #selector(handleSend), for: .touchUpInside)
         containerView.addSubview(sendButton)
@@ -190,7 +192,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         
         if message.fromId == FIRAuth.auth()?.currentUser?.uid{
             // outgoing blue
-            cell.bubbleView.backgroundColor = ChatMessageCell.blueColor
+            cell.bubbleView.backgroundColor = ChatMessageCell.mainColor
             cell.textView.textColor = UIColor.white
             cell.profileImageView.isHidden = true
             
@@ -200,7 +202,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         }else{
             //incoming gray
             cell.bubbleView.backgroundColor = UIColor(r: 240, g: 240, b: 240)
-            cell.textView.textColor = UIColor.black
+            cell.textView.textColor = UIColor(r: 92, g: 103, b: 115)
             cell.profileImageView.isHidden = false
             
             cell.bubbleViewRightAnchor?.isActive = false

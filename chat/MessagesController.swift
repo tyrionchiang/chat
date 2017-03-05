@@ -125,7 +125,7 @@ class MessagesController: UITableViewController {
     private func attempReloadOfTable(){
         
         self.timer?.invalidate()
-        self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
+        self.timer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(self.handleReloadTable), userInfo: nil, repeats: false)
     }
     
     var timer: Timer?
@@ -139,6 +139,7 @@ class MessagesController: UITableViewController {
         
         //this will crash because of background thread, so lets call this sidpatch_async main thread
         DispatchQueue.main.async(execute: {
+            print("reload")
             self.tableView.reloadData()
         })
     }

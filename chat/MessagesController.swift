@@ -269,6 +269,7 @@ class MessagesController: UITableViewController {
         
         containerView.addSubview(nameLabel)
         nameLabel.text = user.name
+        nameLabel.textColor = UIColor(r: 52, g: 63, b: 75)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         //need x, y, width, height anchors
         nameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8).isActive = true

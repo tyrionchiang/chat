@@ -26,6 +26,8 @@ class UserCell:UITableViewCell{
                 let dateFormatter = DateFormatter()
                 if today - seconds < 60*60*24{
                     dateFormatter.dateFormat = "h:mm a"
+                }else if today - seconds < 60*60*24*365{
+                    dateFormatter.dateFormat = "DD/MM"
                 }else{
                     dateFormatter.dateFormat = "DD/MM/YYYY"
                 }
@@ -59,6 +61,8 @@ class UserCell:UITableViewCell{
     override func layoutSubviews() {
         super.layoutSubviews()
         
+        textLabel?.textColor = UIColor(r: 72, g: 83, b: 95)
+        detailTextLabel?.textColor = UIColor(r: 92, g: 103, b: 115)
         textLabel?.frame = CGRect(x: 64, y: (textLabel?.frame.origin.y)! - 2, width: (textLabel?.frame.width)!, height: (textLabel?.frame.height)!)
         detailTextLabel?.frame = CGRect(x: 64, y: (detailTextLabel?.frame.origin.y)! + 2, width: (detailTextLabel?.frame.width)!, height: (detailTextLabel?.frame.height)!)
     }
@@ -77,6 +81,7 @@ class UserCell:UITableViewCell{
 //        label.text = "HH:MM:SS"
         label.font = UIFont.systemFont(ofSize: 13)
         label.textColor = UIColor.darkGray
+        label.textAlignment = NSTextAlignment.right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -95,7 +100,7 @@ class UserCell:UITableViewCell{
         profileImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
         
         //need x,y,width, height anchors
-        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 8).isActive = true
+        timeLabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -8).isActive = true
         timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
         timeLabel.widthAnchor.constraint(equalToConstant: 80).isActive = true
         timeLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true

@@ -61,6 +61,7 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
     }()
     
     let cellId = "cellId"
+    var LastCellItemCount = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,12 +179,20 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
         cell.textView.text = message.text
         
         setupCell(cell: cell, message: message)
-        
+//        if LastCellItemCount != messages.count{
+//            LastCellItemCount = messages.count
+//            if (messages.count - 1) == indexPath.item{
+//                print(indexPath.item)
+////                collectionCiewScrollToLastItem(message : message)
+//            }
+//        }
+    
         //lets modify the bubbleView's width somehow???
         cell.bubleWidthAnchor?.constant = estimateFrameForText(text: message.text!).width + 32
         
         return cell
     }
+    
     
     private func setupCell(cell: ChatMessageCell, message: Message){
         if let profileImageUrl = self.user?.profileImageUrl{
@@ -314,10 +323,21 @@ class ChatLogController : UICollectionViewController, UITextFieldDelegate, UICol
             
             let recipientUserMessagesRef = FIRDatabase.database().reference().child("user-messages").child(toId).child(fromId)
             recipientUserMessagesRef.updateChildValues([messageId : 1])
+            
         })
         
-        
+        collectionCiewScrollToLastItem()
+
     }
+    
+    private func collectionCiewScrollToLastItem(){
+        let item = messages.count - 1
+        if item >= 0{
+            let insertionIndexPath = IndexPath(item: item, section: 0)
+            collectionView?.scrollToItem(at: insertionIndexPath, at: .bottom, animated: true)
+        }
+    }
+
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         handleSend()

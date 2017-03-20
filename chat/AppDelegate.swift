@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FBSDKCoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,15 +18,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.tintColor = UIColor(r: 184, g: 153, b: 129)
         window?.backgroundColor = UIColor(r: 245, g: 245, b: 245)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: MessagesController())
+        window?.rootViewController = UINavigationController(rootViewController: ViewController())
         // Override point for customization after application launch.
         
         FIRApp.configure()
         return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+      
+        
+        let handled = FBSDKApplicationDelegate.sharedInstance().application(app, open: url, sourceApplication: options[UIApplicationOpenURLOptionsKey.sourceApplication] as! String!, annotation: options[UIApplicationOpenURLOptionsKey.annotation])
+
+        return handled
+
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

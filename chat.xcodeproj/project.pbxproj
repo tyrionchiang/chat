@@ -215,6 +215,11 @@
 						CreatedOnToolsVersion = 8.1;
 						DevelopmentTeam = NKH8NVM22B;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+						};
 					};
 				};
 			};

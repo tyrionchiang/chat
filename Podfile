@@ -10,9 +10,14 @@ target 'chat' do
   pod 'Firebase/Database'
   pod 'Firebase/Auth'
   pod 'Firebase/Storage'
+
   pod 'FBSDKCoreKit'
   pod 'FBSDKShareKit'
   pod 'FBSDKLoginKit'
+
   pod 'GoogleSignIn'
+
+  pod 'Fabric'
+  pod 'TwitterKit'
 
 end

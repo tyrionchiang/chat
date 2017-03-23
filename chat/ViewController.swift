@@ -9,12 +9,88 @@
 import UIKit
 import FBSDKLoginKit
 import Firebase
+import GoogleSignIn
+import TwitterKit
 
-class ViewController: UIViewController, FBSDKLoginButtonDelegate {
+class ViewController: UIViewController, FBSDKLoginButtonDelegate, GIDSignInUIDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        setupFacebookButtons()
+        
+        setupGoogleButtons()
+        
+        setupTwitterButton()
+        
+    }
+    
+    fileprivate func setupTwitterButton(){
+        let twitterButton = TWTRLogInButton { (session, error) in
+            if let err = error{
+                print("Failed to login via Twitter: ", err)
+                return
+            }
+            print("Successfully logged in under Twitter")
+            
+            //lets login with Firebase
+            
+            guard let token = session?.authToken else {return}
+            guard let secret = session?.authTokenSecret else {return}
+            let credentials = FIRTwitterAuthProvider.credential(withToken: token, secret: secret)
+            FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+                if let err = error{
+                    print("Failed to login to FirbaseU with Twitter: ", err)
+                    return
+                }
+                print("Successfully created a Firbase-Twitter user: ",user?.uid ?? "")
+            })
+            
+        }
+        twitterButton.frame = CGRect(x: 16, y: 212 + 66 + 66 + 66, width: view.frame.width - 32, height: 50)
+        view.addSubview(twitterButton)
+    }
+    
+    fileprivate func setupGoogleButtons(){
+        let googleButton = GIDSignInButton()
+        googleButton.frame = CGRect(x: 16, y: 212, width: view.frame.width - 32, height: 32)
+        view.addSubview(googleButton)
+        
+        GIDSignIn.sharedInstance().uiDelegate = self
+        
+        //add our custom Google login button here
+        let customGoogleButton = UIButton(type: .system)
+        customGoogleButton.backgroundColor = .orange
+        customGoogleButton.frame = CGRect(x: 16, y: 212 + 66, width: view.frame.width - 32, height: 50)
+        customGoogleButton.setTitle("Custom Google Login here", for: .normal)
+        customGoogleButton.setTitleColor(.white, for: .normal)
+        customGoogleButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        view.addSubview(customGoogleButton)
+        
+        customGoogleButton.addTarget(self, action: #selector(handleCustomGoogleLogin), for: .touchUpInside)
+        
+        
+        let customGoogleLogOutButton = UIButton(type: .system)
+        customGoogleLogOutButton.backgroundColor = .orange
+        customGoogleLogOutButton.frame = CGRect(x: 16, y: 212 + 66 + 66, width: view.frame.width - 32, height: 50)
+        customGoogleLogOutButton.setTitle("Custom Google LogOut here", for: .normal)
+        customGoogleLogOutButton.setTitleColor(.white, for: .normal)
+        customGoogleLogOutButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 14)
+        view.addSubview(customGoogleLogOutButton)
+        
+        customGoogleButton.addTarget(self, action: #selector(handleCustomGoogleLogOut), for: .touchUpInside)
+
+    }
+    
+    func handleCustomGoogleLogOut() {
+        GIDSignIn.sharedInstance().signOut()
+    }
+    
+    func handleCustomGoogleLogin(){
+        GIDSignIn.sharedInstance().signIn()
+    }
+    
+    fileprivate func setupFacebookButtons(){
         let loginButton = FBSDKLoginButton()
         view.addSubview(loginButton)
         //frame's are obselete, please use constraints instead because its 2016 after all
@@ -32,8 +108,9 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate {
         view.addSubview(customFBButton)
         
         customFBButton.addTarget(self, action: #selector(handleCustomFBLogin), for: .touchUpInside)
-        
     }
+
+    
     func handleCustomFBLogin(){
         FBSDKLoginManager().logIn(withReadPermissions: ["email"], from: self) { (result, err) in
             if err != nil{

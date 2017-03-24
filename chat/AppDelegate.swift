@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         return true
     }
     
+    
     func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
         if let err = error{
             print("Failed to log into Google", err)
@@ -46,18 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         }
         print("Successfully logged into Google", user)
         
-        guard let idToken = user.authentication.idToken else {return}
-        guard let accessToken = user.authentication.accessToken else {return}
+        //lets login with Firebase
+        ViewController().handleGoogleRegister(user : user)
         
-        let credentials = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
-        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
-            if let err = error{
-                print("Failed to creat a FirbaseUser with Google account: ", err)
-                return
-            }
-            guard let uid = user?.uid else {return}
-            print("Successfully logged into Firebase with Google", uid)
-        })
     }
     
     func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {

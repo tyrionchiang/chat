@@ -94,12 +94,12 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate, GIDSignInUIDel
 
     
     func handleCustomFBLogin(){
-        FBSDKLoginManager().logIn(withReadPermissions: ["email"], from: self) { (result, err) in
+        FBSDKLoginManager().logIn(withReadPermissions: ["email", "public_profile"], from: self) { (result, err) in
             if err != nil{
                 print("Custom FB Login failed:",err!)
                 return
             }
-            //lets login with Firebase
+            //lets login with Firebase  
             self.handleFBRegister()
         }
     }

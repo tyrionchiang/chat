@@ -26,13 +26,27 @@ extension ViewController{
                 return
             }
             print("Successfully logged in with our Twitter user: ")
-            guard let uid = user?.uid, let name = user?.displayName, let userName = session?.userName else {return}
-            let email = "@" + userName
             
-            let profileImageUrl = "https://twitter.com/\(userName)/profile_image?size=bigger"
-            self.registerUserIntoDatabaseWithUid(uid: uid, name: name, email: email, profileImageUrl: profileImageUrl)
-        })
+            guard let uid = user?.uid else{return}
+            
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    guard let name = user?.displayName, let userName = session?.userName else {return}
+                    let email = "@" + userName
+                    
+                    let profileImageUrl = "https://twitter.com/\(userName)/profile_image?size=bigger"
+                    let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+                    self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
 
+                }
+            })
+        })
     }
     
     func handleGoogleRegister(user : GIDGoogleUser){
@@ -47,9 +61,24 @@ extension ViewController{
                 return
             }
             print("Successfully logged in with our Google user: ")
-            guard let uid = user?.uid, let name = user?.displayName, let email = user?.email,  let profileImageUrl = user?.photoURL?.absoluteString else {return}
             
-            self.registerUserIntoDatabaseWithUid(uid: uid, name: name, email: email, profileImageUrl: profileImageUrl)
+            guard let uid = user?.uid else{return}
+            
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    
+                    guard let name = user?.displayName, let email = user?.email,  let profileImageUrl = user?.photoURL?.absoluteString else {return}
+                    
+                    let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+                    self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
+                }
+            })
         })
     }
     
@@ -67,34 +96,41 @@ extension ViewController{
                 return
             }
             print("Successfully logged in with our FB user: ")
-            guard let uid = user?.uid, let name = user?.displayName, let email = user?.email else{return}
             
+            guard let uid = user?.uid else{return}
             
-            FBSDKGraphRequest(graphPath: "/me", parameters: nil).start { (connection, result, err) in
-                if err != nil{
-                    print("Failed to start graph request", err!)
-                    return
-                }
-                print(result!)
-                
-                if let data = result as? [String:Any] {
-                
-                    let profileImageUrl = "https://graph.facebook.com/\(data["id"] as! String)/picture?type=large"
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    FBSDKGraphRequest(graphPath: "/me", parameters: nil).start { (connection, result, err) in
+                        if err != nil{
+                            print("Failed to start graph request", err!)
+                            return
+                        }
                         
-                    self.registerUserIntoDatabaseWithUid(uid: uid, name: name, email: email, profileImageUrl: profileImageUrl)
-
+                        if let data = result as? [String:Any] {
+                            
+                            let profileImageUrl = "https://graph.facebook.com/\(data["id"] as! String)/picture?type=large"
+                            
+                            guard let name = user?.displayName, let email = user?.email else{return}
+                            
+                            let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+                            self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
+                            
+                        }
+                    }
                 }
-            }
-
-
+            })
         })
-        
     }
     
 
-    private func registerUserIntoDatabaseWithUid(uid: String, name: String, email: String, profileImageUrl: String){
-        print(profileImageUrl)
-        let values = ["name" : name, "email": email, "profileImageUrl": profileImageUrl]
+    private func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]){
         
         let ref = FIRDatabase.database().reference()
         let usersReference = ref.child("users").child(uid)

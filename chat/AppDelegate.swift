@@ -17,7 +17,7 @@ import TwitterKit
 class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
 
     var window: UIWindow?
-
+    let messagesController = MessagesController()
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window?.tintColor = UIColor(r: 184, g: 153, b: 129)
         window?.backgroundColor = UIColor(r: 245, g: 245, b: 245)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: MessagesController())
+        window?.rootViewController = UINavigationController(rootViewController: messagesController)
         // Override point for customization after application launch.
         
         FIRApp.configure()
@@ -48,7 +48,41 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         print("Successfully logged into Google", user)
         
         //lets login with Firebase
-        ViewController().handleGoogleRegister(user : user)
+        
+        guard let idToken = user.authentication.idToken else {return}
+        guard let accessToken = user.authentication.accessToken else {return}
+        
+        let credentials = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+            if let err = error{
+                print("Failed to creat a FirbaseUser with Google account: ", err)
+                return
+            }
+            print("Successfully logged in with our Google user: ")
+            
+            guard let uid = user?.uid else{return}
+            
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    let navigationController = self.window?.rootViewController
+                    navigationController?.dismiss(animated: true, completion: nil)
+                    self.messagesController.fetchUserAndSetupNavBarTitle()
+
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    
+//                    guard let name = user?.displayName, let email = user?.email,  let profileImageUrl = user?.photoURL?.absoluteString else {return}
+//                    
+//                    let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+//                    self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
+                }
+            })
+        })
+
         
     }
     

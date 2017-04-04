@@ -2,28 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    
-    <key>Fabric</key>
-    <dict>
-        <key>APIKey</key>
-        <string>ab0f9a6c2eae3ee4f28a27f6eacce04a41a078c8</string>
-        <key>Kits</key>
-        <array>
-            <dict>
-                <key>KitInfo</key>
-                <dict>
-                    <key>consumerKey</key>
-                    <string>2aL4UM768g8mJSoozgd80kKh3</string>
-                    <key>consumerSecret</key>
-                    <string>DRNnYL5Rv95XvIXK3viHoYBiOwv2NGnw8vnoHGiH0nzN5u2Jgb</string>
-                </dict>
-                <key>KitName</key>
-                <string>Twitter</string>
-            </dict>
-        </array>
-    </dict>
-    
-    
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
@@ -57,6 +35,31 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>ab0f9a6c2eae3ee4f28a27f6eacce04a41a078c8</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+			<dict>
+				<key>KitInfo</key>
+				<dict>
+					<key>consumerKey</key>
+					<string>ZrFiRK83v6O4Vjk5oHKo08EBE</string>
+					<key>consumerSecret</key>
+					<string>cuCYGmjASUi7mJHXmfAosJz1R3unFLpZ3bS1uJdLVnoHUyS3qD</string>
+				</dict>
+				<key>KitName</key>
+				<string>Twitter</string>
+			</dict>
+		</array>
+	</dict>
 	<key>FacebookAppID</key>
 	<string>1855650914722735</string>
 	<key>FacebookDisplayName</key>

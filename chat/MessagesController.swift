@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class MessagesController: UITableViewController {
+class MessagesController: UITableViewController{
     
     let cellId = "cellId"
     
@@ -304,8 +304,8 @@ class MessagesController: UITableViewController {
         }
         
         
-        let loginController = NewUIDesginViewController()
-//        loginController.messagesController = self
+        let loginController = LoginController()
+        loginController.messagesController = self
         present(loginController, animated: true, completion: nil)
     }
 

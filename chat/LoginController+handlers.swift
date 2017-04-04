@@ -1,21 +1,28 @@
 //
-//  LoginController+handlers.swift
+//  LoginController+handler.swift
 //  chat
 //
-//  Created by Chiang Chuan on 05/12/2016.
-//  Copyright © 2016 Chiang Chuan. All rights reserved.
+//  Created by Chiang Chuan on 04/04/2017.
+//  Copyright © 2017 Chiang Chuan. All rights reserved.
 //
 
 import UIKit
 import Firebase
-
+import FBSDKCoreKit
+import GoogleSignIn
+import TwitterKit
 
 extension LoginController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
     func handleRegister(){
         
-        guard let email = emailTextField.text, let password = passwordTextField.text, let name = nameTextField.text else {
+        view.endEditing(false)
+        activityIncidatorViewAnimating(animated: true)
+
+        
+        
+        guard let email = signupEmailTextField.text, let password = signupPasswordTextField.text, let name = signupNameTextField.text else {
             print("Form is not valid")
             return
         }
@@ -64,30 +71,33 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     }
     
     private func registerUserIntoDatabaseWithUid(uid: String, values:[String: AnyObject]){
+
         let ref = FIRDatabase.database().reference()
         let usersReference = ref.child("users").child(uid)
-        
-        usersReference.updateChildValues(values, withCompletionBlock: { (err, ref) in
-            if err != nil{
-                print(err!)
+
+        usersReference.updateChildValues(values) { (error, ref) in
+            if let err = error{
+                print(err)
                 self.activityIncidatorViewAnimating(animated: false)
                 return
             }
-            
-//            self.messagesController?.fetchUserAndSetupNavBarTitle()
-//            self.messagesController?.navigationItem.title = values["name"] as? String
+            print("Successfully registerUser into Database")
             let user = User()
-            //this setter potentially crashes if keys don't match
             user.setValuesForKeys(values)
-            self.messagesController?.setupNavBarWithUser(user: user)
-
             
+            self.messagesController?.setupNavBarWithUser(user: user)
             self.activityIncidatorViewAnimating(animated: false)
-            self.dismiss(animated: true, completion: nil)
-        })
-    }
-    
 
+            self.dismiss(animated: true, completion: nil)
+
+        }
+    }
+
+    
+    
+    
+    
+    
     func handleSelectProfileImageView() {
         let picker = UIImagePickerController()
         
@@ -97,7 +107,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         
         present(picker, animated: true, completion: nil)
     }
-
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         var selectedImageFromPicker : UIImage?
@@ -121,7 +131,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         dismiss(animated: true, completion: nil)
     }
     
-
+    
     
     //图片压缩 1000kb以下的图片控制在100kb-200kb之间
     func compressImageSize(image:UIImage) -> Data?{
@@ -151,6 +161,148 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         
         return zipImageData as Data?
     }
+    
+    
+    
+    
+    
+    
+    
+    
+    //social account login handlers
+    
+    func handleTwitterRegister( session: TWTRSession? ){
+        
+        guard let token = session?.authToken else {return}
+        guard let secret = session?.authTokenSecret else {return}
+        
+        let credentials = FIRTwitterAuthProvider.credential(withToken: token, secret: secret)
+        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+            if let err = error{
+                print("Failed to login to Firbase with Twitter: ", err)
+                return
+            }
+            print("Successfully logged in with our Twitter user: ")
+            
+            guard let uid = user?.uid else{return}
+            
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    self.successfullyLogged()
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    guard let name = user?.displayName, let userName = session?.userName else {return}
+                    let email = "@" + userName
+                    
+                    let profileImageUrl = "https://twitter.com/\(userName)/profile_image?size=bigger"
+                    let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+                    self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
+                    
+                }
+            })
+        })
+    }
+    
+    func handleGoogleRegister(user : GIDGoogleUser){
 
+        
+        guard let idToken = user.authentication.idToken else {return}
+        guard let accessToken = user.authentication.accessToken else {return}
+        
+        let credentials = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+            if let err = error{
+                print("Failed to creat a FirbaseUser with Google account: ", err)
+                return
+            }
+            print("Successfully logged in with our Google user: ")
+            
+            guard let uid = user?.uid else{return}
+            
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    self.successfullyLogged()
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    
+                    guard let name = user?.displayName, let email = user?.email,  let profileImageUrl = user?.photoURL?.absoluteString else {return}
+                    
+                    let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+                    self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
+                }
+            })
+        })
+    }
+    
+    func handleFBRegister(){
 
+        let accessToken = FBSDKAccessToken.current()
+        guard let accessTokenString = accessToken?.tokenString else{
+            return
+        }
+        
+        let credentials = FIRFacebookAuthProvider.credential(withAccessToken: accessTokenString)
+        FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
+            if error != nil{
+                print("Something went wrong with our FB user: ", error!)
+                return
+            }
+            print("Successfully logged in with our FB user: ")
+            
+            
+            guard let uid = user?.uid else{return}
+            
+            let checkUserExistRef = FIRDatabase.database().reference().child("users")
+            checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.hasChild(uid){
+                    
+                    print("user exist")
+                    self.successfullyLogged()
+                    
+                }else{
+                    print("user doesn't exist, add user into database")
+                    FBSDKGraphRequest(graphPath: "/me", parameters: nil).start { (connection, result, err) in
+                        if err != nil{
+                            print("Failed to start graph request", err!)
+                            return
+                        }
+                        
+                        if let data = result as? [String:Any] {
+                            
+                            let profileImageUrl = "https://graph.facebook.com/\(data["id"] as! String)/picture?type=large"
+                            
+                            guard let name = user?.displayName, let email = user?.email else{return}
+                            
+                            let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
+                            self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
+                            
+                        }
+                    }
+                }
+            })
+        })
+    }
+    
+    func successfullyLogged(){
+        //successfully logged in our user
+        messagesController?.fetchUserAndSetupNavBarTitle()
+        
+        activityIncidatorViewAnimating(animated: false)
+        dismiss(animated: true, completion: nil)
+        
+        print("successfullyLogged")
+
+    }
+    
+    
+
+    
 }

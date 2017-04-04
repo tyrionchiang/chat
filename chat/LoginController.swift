@@ -1,56 +1,228 @@
 //
-//  LoginViewController.swift
+//  NewUIDesginViewController.swift
 //  chat
 //
-//  Created by Chiang Chuan on 26/11/2016.
-//  Copyright © 2016 Chiang Chuan. All rights reserved.
+//  Created by Chiang Chuan on 29/03/2017.
+//  Copyright © 2017 Chiang Chuan. All rights reserved.
 //
 
-import UIKit
-import Firebase
 
-class LoginController: UIViewController {
-    
+import UIKit
+import FBSDKLoginKit
+import Firebase
+import GoogleSignIn
+import TwitterKit
+
+class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLoginButtonDelegate, GIDSignInUIDelegate{
+
     var messagesController : MessagesController?
     
-    let inputsContainerView : UIView = {
+    static let whiteColor = UIColor(r: 245, g: 245, b: 245)
+    static let TextFieldColor = UIColor(r: 161, g: 170, b: 179)
+    let bd = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 12) //Basic Displacement
+    
+    let loginView : UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.darkGray
+        view.backgroundColor = UIColor(r: 51, g: 51, b: 51)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 5
-        view.layer.masksToBounds = true
         return view
     }()
     
-    lazy var loginRegisterButton : UIButton = {
-        let button = UIButton()
-        button.backgroundColor = ChatMessageCell.mainColor
-        button.setTitle("Login", for: .normal)
-        button.layer.cornerRadius = 5
-        button.layer.masksToBounds = true
-        button.setTitleColor(whitColor, for: .normal)
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.addTarget(self, action: #selector(handleLoginRegister), for: .touchUpInside)
-        
-        return button
+    let signupView : UIView = {
+        let view = UIView()
+        view.backgroundColor = whiteColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
-    func handleLoginRegister(){
-        
-        self.activityIncidatorViewAnimating(animated: true)
+    let loginTitleUILable : UILabel = {
+       let label = UILabel()
+        label.text = "Log in"
+        label.textColor = ChatMessageCell.mainColor
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.textAlignment = NSTextAlignment.center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    let sginupTitleUILable : UILabel = {
+        let label = UILabel()
+        label.text = "Sign up"
+        label.textColor = ChatMessageCell.mainColor
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.textAlignment = NSTextAlignment.center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
-        if loginRegisterSegmentControl.selectedSegmentIndex == 0{
-            handleLogin()
-        }else{
-            handleRegister()
+    //social account Login Button
+    let socialButtonContainerView : UIView = {
+        let view = UIView()
+//        view.backgroundColor = UIColor.white
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let socialLoginTextLabel : UILabel = {
+        let label = UILabel()
+        label.text = "Log in to start chat!"
+        label.textColor = whiteColor
+        label.font = UIFont.boldSystemFont(ofSize: 14)
+        label.textAlignment = NSTextAlignment.center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    lazy var FBLoginButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor(r: 59, g: 89, b: 153)
+        button.setTitle("Facebook", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 1
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handleCustomFBLogin), for: .touchUpInside)
+        return button
+    }()
+    func handleCustomFBLogin(){
+        FBSDKLoginManager().logIn(withReadPermissions: ["email", "public_profile"], from: self) { (result, err) in
+            if err != nil{
+                print("Custom FB Login failed:",err!)
+                return
+            }
+            //lets login with Firebase
+            self.handleFBRegister()
         }
     }
     
     
+    lazy var twitterLoginButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor(r: 85, g: 172, b: 238)
+        button.setTitle("Twitter", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.layer.cornerRadius = 1
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handleCustomTWTRLogin), for: .touchUpInside)
+        return button
+    }()
+    func handleCustomTWTRLogin(){
+        Twitter.sharedInstance().logIn { (session, error) in
+            if let err = error{
+                print("Failed to login via Twitter: ", err)
+                return
+            }
+            print("Successfully logged in under Twitter")
+            
+            //lets login with Firebase
+            self.handleTwitterRegister(session: session!)
+        }
+    }
+
+    
+    lazy var googleLoginButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = UIColor(r: 221, g: 75, b: 57)
+        button.setTitle("Google", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.layer.cornerRadius = 1
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(handleCustomGoogleLogin), for: .touchUpInside)
+        return button
+    }()
+    func handleCustomGoogleLogin(){
+        GIDSignIn.sharedInstance().uiDelegate = self
+        GIDSignIn.sharedInstance().signIn()
+    }
+    
+    func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    
+    
+    let socialSeparatorView : UIView = {
+        let view = UIView()
+        view.backgroundColor = whiteColor
+        view.backgroundColor = UIColor(white: 0.9, alpha: 0.4)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    let socialSeparatorLabel : UILabel = {
+        let label = UILabel()
+        label.backgroundColor = UIColor(r: 51, g: 51, b: 51)
+        label.text = "or"
+        label.textColor = whiteColor
+        label.font = UIFont.boldSystemFont(ofSize: 13)
+        label.textAlignment = NSTextAlignment.center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    
+    //email Login 
+    let loginInputsContainerView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.darkGray
+        view.layer.borderWidth = 0.2
+        view.layer.borderColor = TextFieldColor.cgColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 3
+        view.layer.masksToBounds = true
+        return view
+    }()
+
+    
+    
+    let loginEmailTextField : UITextField = {
+        let tf = UITextField()
+        tf.tintColor = whiteColor
+        tf.textColor = whiteColor
+        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName: TextFieldColor])
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+        
+
+    let loginEmailSeparatorView : UIView = {
+        let view = UIView()
+        view.backgroundColor = TextFieldColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    let loginPasswordTextField : UITextField = {
+        let tf = UITextField()
+        tf.tintColor = whiteColor
+        tf.textColor = whiteColor
+        tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: TextFieldColor])
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        tf.isSecureTextEntry = true
+        return tf
+    }()
+    
+    lazy var loginButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = ChatMessageCell.mainColor
+        button.setTitle("Login", for: .normal)
+        button.layer.cornerRadius = 3
+        button.layer.masksToBounds = true
+        button.setTitleColor(whiteColor, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.addTarget(self, action: #selector(handleLogin), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    
     func handleLogin(){
-        guard let email = emailTextField.text, let password = passwordTextField.text else {
+        activityIncidatorViewAnimating(animated: true)
+
+        
+        guard let email = loginEmailTextField.text, let password = loginPasswordTextField.text else {
             print("Form is not value")
             return
         }
@@ -62,80 +234,110 @@ class LoginController: UIViewController {
             }
             
             //successfully logged in our user
-            self.messagesController?.fetchUserAndSetupNavBarTitle()
+            self.successfullyLogged()
             
-            self.activityIncidatorViewAnimating(animated: false)
-            self.dismiss(animated: true, completion: nil)
-
         })
     }
+
     
     
     
-    let titleUILabel : UILabel = {
+    //email Signup
+    
+    
+    let signupTextLabel : UILabel = {
         let label = UILabel()
-        label.text = "CHAT"
-        label.font = UIFont(name: "SwistblnkMonthoers", size: 98)
-        label.textColor = whitColor
+        label.text = "Creat your account now!"
+        label.textColor = TextFieldColor
+        label.font = UIFont.boldSystemFont(ofSize: 14)
         label.textAlignment = NSTextAlignment.center
+        label.isHidden = true
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
     
-    static let whitColor = UIColor(r: 245, g: 245, b: 245)
-    static let TextFieldColor = UIColor(r: 111, g: 120, b: 126)
+    let signupInputsContainerView : UIView = {
+        let view = UIView()
+        view.backgroundColor = UIColor.white
+        view.layer.borderWidth = 0.2
+        view.layer.borderColor = UIColor(white : 0.2, alpha: 0.9).cgColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 3
+        view.layer.masksToBounds = true
+        return view
+    }()
     
-    let nameTextField : UITextField = {
-       let tf = UITextField()
-        tf.tintColor = whitColor
-        tf.textColor = whitColor
-//        tf.placeholder = ""
-        tf.attributedPlaceholder = NSAttributedString(string: "", attributes: [NSForegroundColorAttributeName: TextFieldColor])
+    let signupNameTextField : UITextField = {
+        let tf = UITextField()
+        tf.tintColor = UIColor(r: 51, g: 51, b: 51)
+        tf.textColor = UIColor(r: 51, g: 51, b: 51)
+        tf.attributedPlaceholder = NSAttributedString(string: "Name", attributes: [NSForegroundColorAttributeName: TextFieldColor])
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
     }()
     
-    let nameSeparatorView : UIView = {
+    
+    let signupNameSeparatorView : UIView = {
+        let view = UIView()
+        view.backgroundColor = TextFieldColor
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    
+    let signupEmailTextField : UITextField = {
+        let tf = UITextField()
+        tf.tintColor = UIColor(r: 51, g: 51, b: 51)
+        tf.textColor = UIColor(r: 51, g: 51, b: 51)
+        tf.attributedPlaceholder = NSAttributedString(string: "Email", attributes: [NSForegroundColorAttributeName: TextFieldColor])
+        tf.translatesAutoresizingMaskIntoConstraints = false
+        return tf
+    }()
+    
+    
+    let signupEmailSeparatorView : UIView = {
         let view = UIView()
         view.backgroundColor = TextFieldColor
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let emailTextField : UITextField = {
+    let signupPasswordTextField : UITextField = {
         let tf = UITextField()
-        tf.tintColor = whitColor
-        tf.textColor = whitColor
-        tf.attributedPlaceholder = NSAttributedString(string: "Email Address", attributes: [NSForegroundColorAttributeName: TextFieldColor])
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
-    }()
-    
-    let emailSeparatorView : UIView = {
-        let view = UIView()
-        view.backgroundColor = TextFieldColor
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    let passwordTextField : UITextField = {
-        let tf = UITextField()
-        tf.tintColor = whitColor
-        tf.textColor = whitColor
+        tf.tintColor = UIColor(r: 51, g: 51, b: 51)
+        tf.textColor = UIColor(r: 51, g: 51, b: 51)
         tf.attributedPlaceholder = NSAttributedString(string: "Password", attributes: [NSForegroundColorAttributeName: TextFieldColor])
         tf.translatesAutoresizingMaskIntoConstraints = false
         tf.isSecureTextEntry = true
         return tf
     }()
     
+    lazy var signupButton : UIButton = {
+        let button = UIButton(type: .system)
+        button.backgroundColor = ChatMessageCell.mainColor
+        button.setTitle("Sign up", for: .normal)
+        button.layer.cornerRadius = 3
+        button.layer.masksToBounds = true
+        button.setTitleColor(whiteColor, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        button.addTarget(self, action: #selector(handleRegister), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    
+    
     lazy var profileImageView : UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = whitColor
+        imageView.backgroundColor = UIColor(white: 0.8, alpha: 0.8)
         imageView.image = UIImage(named: "profileImage")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = UIColor(white: 0.75, alpha: 1)
+        imageView.tintColor = UIColor(r: 78, g: 78, b: 78)
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.cornerRadius = 75
+        imageView.layer.cornerRadius = self.bd.width * 0.4 / 2
         imageView.layer.masksToBounds = true
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
@@ -143,57 +345,15 @@ class LoginController: UIViewController {
         
         return imageView
     }()
-    
-    
-    lazy var loginRegisterSegmentControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items : ["Login", "Register"])
-        sc.setTitleTextAttributes([NSForegroundColorAttributeName: UIColor(r: 161, g: 170, b: 176)], for: UIControlState.selected)
-        sc.tintColor = UIColor.darkGray
-        sc.selectedSegmentIndex = 0
-        sc.translatesAutoresizingMaskIntoConstraints = false
-        sc.addTarget(self, action: #selector(handleLoginReisterChange), for: .valueChanged)
-        return sc
-    }()
-    
-    func handleLoginReisterChange() {
-        let title = loginRegisterSegmentControl.titleForSegment(at: loginRegisterSegmentControl.selectedSegmentIndex)
-        loginRegisterButton.setTitle(title, for: .normal)
-        
-        //Change height of inputContainerView, but how??
-        inpputsContainerViewHeightAnchor?.constant = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 100 : 150
-        
-        //Change hight of nameTextField
-        nameTextFieldHeightAnchor?.isActive = false
-        nameTextFieldHeightAnchor = nameTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 0 : 1/3)
-//        nameTextField.placeholder = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? "" : "Name"
-        nameTextField.attributedPlaceholder = NSAttributedString(string: loginRegisterSegmentControl.selectedSegmentIndex == 0 ? "" : "Name", attributes: [NSForegroundColorAttributeName: LoginController.TextFieldColor])
-        nameTextField.text = ""
-        nameTextFieldHeightAnchor?.isActive = true
-        
-        //Change hight of emailTextField
-        emailTextFieldHeightAnchor?.isActive = false
-        emailTextFieldHeightAnchor = emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
-        emailTextField.text = ""
-        emailTextFieldHeightAnchor?.isActive = true
-        
-        //Change hight of passwordTextField
-        passwordTextFieldHeightAnchor?.isActive = false
-        passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 1/2 : 1/3)
-        passwordTextField.text = ""
-        passwordTextFieldHeightAnchor?.isActive = true
-        
-        //Change height of profileImageView
-        profileImageViewHeightAnchor?.constant = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 0 : 150
-        
-        //changr height of titleUILabel 
-        titleUILabelHeightAnchor?.constant = loginRegisterSegmentControl.selectedSegmentIndex == 0 ? 150 : 0
 
-    }
     
+    
+
+
     let activityIncidatorView : UIActivityIndicatorView = {
         let aiv = UIActivityIndicatorView()
         aiv.hidesWhenStopped = true
-        aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
+        aiv.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.white
         return aiv
     }()
     func activityIncidatorViewAnimating( animated : Bool ){
@@ -209,132 +369,375 @@ class LoginController: UIViewController {
         }
     }
 
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.hideKeyboardWhenTappedAround()
 
-        view.backgroundColor = UIColor(r: 51, g: 51, b: 51)
+        GIDSignIn.sharedInstance().signOut()
+        FBSDKLoginManager().logOut()
+        if let TWTRUserID = Twitter.sharedInstance().sessionStore.session()?.userID{
+            print("Logout",TWTRUserID)
+            Twitter.sharedInstance().sessionStore.logOutUserID(TWTRUserID)
+        }
         
         
-        view.addSubview(inputsContainerView)
-        view.addSubview(loginRegisterButton)
-        view.addSubview(profileImageView)
-        view.addSubview(titleUILabel)
-        view.addSubview(loginRegisterButton)
-        view.addSubview(loginRegisterSegmentControl)
+        view.addSubview(loginView)
+        view.addSubview(signupView)
+
         
+        setupLoginView()
+        setupSignupView()
         
-        
-        setupInputsContainerView()
-        setupLoginRegisterButton()
-        setupProfileImageView()
-        setupTitleUILabel()
-        setupLoginRegisterButton()
-        setupLoginReisterSegmentControl()
-        
+        setupKeyboardObservers()
     }
     
     
-    func setupLoginReisterSegmentControl(){
+    var loginViewHeightAnchor : NSLayoutConstraint?
+    var loginTitleUILabelYAnchor : NSLayoutConstraint?
+    
+    func setupLoginView(){
+        // need x, y, width, height constraints
+        loginView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        loginView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        loginView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        loginViewHeightAnchor = loginView.heightAnchor.constraint(equalToConstant: bd.height * 10)
+        loginViewHeightAnchor?.isActive = true
+        
+        
+        let loginTap = UITapGestureRecognizer(target: self, action: #selector(self.handleLoginViewTap))
+        loginTap.delegate = self
+        loginView.addGestureRecognizer(loginTap)
+        
+        
+        
+        loginView.addSubview(loginTitleUILable)
+        loginView.addSubview(socialButtonContainerView)
+        loginView.addSubview(loginInputsContainerView)
+        loginView.addSubview(loginButton)
+
+        
         //ned x, y, width, height constraints
+        loginTitleUILable.centerXAnchor.constraint(equalTo: loginView.centerXAnchor).isActive = true
+        loginTitleUILabelYAnchor = loginTitleUILable.centerYAnchor.constraint(equalTo: loginView.topAnchor, constant: bd.height * 1.4)
+        loginTitleUILabelYAnchor?.isActive = true
+        loginTitleUILable.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        loginTitleUILable.heightAnchor.constraint(equalToConstant: 32).isActive = true
         
-        loginRegisterSegmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginRegisterSegmentControl.bottomAnchor.constraint(equalTo: inputsContainerView.topAnchor, constant: -12).isActive = true
-        loginRegisterSegmentControl.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        loginRegisterSegmentControl.heightAnchor.constraint(equalToConstant: 37).isActive = true
+        
+        setupSocialButtonContainerView()
+        setupLoginInputsContainerView()
+
+
+        loginButton.centerXAnchor.constraint(equalTo: loginView.centerXAnchor).isActive = true
+        loginButton.topAnchor.constraint(equalTo: loginInputsContainerView.bottomAnchor, constant: bd.height * 0.25).isActive = true
+        loginButton.widthAnchor.constraint(equalTo: loginInputsContainerView.widthAnchor).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: bd.height * 0.89).isActive = true
+        
+        
     }
     
-    var titleUILabelHeightAnchor : NSLayoutConstraint?
     
-    func setupTitleUILabel(){
-        //need x, y, width, height constrains
-        titleUILabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        titleUILabel.bottomAnchor.constraint(equalTo: loginRegisterSegmentControl.topAnchor, constant : -12).isActive = true
-        titleUILabel.widthAnchor.constraint(equalTo: loginRegisterSegmentControl.widthAnchor).isActive = true
-        titleUILabelHeightAnchor = titleUILabel.heightAnchor.constraint(equalToConstant: 150)
-        titleUILabelHeightAnchor?.isActive = true
+    
+    var islogin : Bool = true
+    func handleLoginViewTap() {
+        if !islogin {
+            islogin = !islogin
+            loginViewHeightAnchor?.constant = bd.height * 10
+            loginTitleUILabelYAnchor?.constant = bd.height * 1.4
+            socialButtonContainerView.isHidden = false
+            loginInputsContainerView.isHidden = false
+            loginButton.isHidden = false
+            self.signupTextLabel.isHidden = true
+            signupTextLabelHeightAnchor?.constant = 24
+            signupTitleUILableCenterYAnchor?.constant = bd.height
+            
+            loginEmailTextField.text = ""
+            loginPasswordTextField.text = ""
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+        view.endEditing(true)
+    }
+    func handleSignupViewTap() {
+        if islogin{
+            islogin = !islogin
+            loginViewHeightAnchor?.constant =  bd.height * 2
+            loginTitleUILabelYAnchor?.constant = bd.height
+            signupTextLabel.isHidden = false
+            
+            signupNameTextField.text = ""
+            signupEmailTextField.text = ""
+            signupPasswordTextField.text = ""
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: { (bool) in
+                self.socialButtonContainerView.isHidden = true
+                self.loginInputsContainerView.isHidden = true
+                self.loginButton.isHidden = true
+
+            })
+        }
+        view.endEditing(true)
     }
     
+    var signupTitleUILableCenterYAnchor: NSLayoutConstraint?
+    var signupTextLabelHeightAnchor : NSLayoutConstraint?
     var profileImageViewHeightAnchor : NSLayoutConstraint?
     
-    func setupProfileImageView(){
+    func setupSignupView(){
+        signupView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        signupView.topAnchor.constraint(equalTo: loginView.bottomAnchor).isActive = true
+        signupView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        signupView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        
+        let signupTap = UITapGestureRecognizer(target: self, action: #selector(self.handleSignupViewTap))
+        signupTap.delegate = self
+        signupView.addGestureRecognizer(signupTap)
+
+        
+        
+        signupView.addSubview(sginupTitleUILable)
+        signupView.addSubview(signupTextLabel)
+        signupView.addSubview(profileImageView)
+        signupView.addSubview(signupInputsContainerView)
+        signupView.addSubview(signupButton)
+
+        
+        setupSignupInputsContainerView()
+        
+        
         //ned x, y, width, height constraints
         
-        profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        profileImageView.bottomAnchor.constraint(equalTo: loginRegisterSegmentControl.topAnchor, constant : -12).isActive = true
-        profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        profileImageViewHeightAnchor = profileImageView.heightAnchor.constraint(equalToConstant: 0)
+        sginupTitleUILable.centerXAnchor.constraint(equalTo: signupView.centerXAnchor).isActive = true
+        signupTitleUILableCenterYAnchor = sginupTitleUILable.centerYAnchor.constraint(equalTo: signupView.topAnchor, constant: bd.height)
+        signupTitleUILableCenterYAnchor?.isActive = true
+        
+        sginupTitleUILable.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        sginupTitleUILable.heightAnchor.constraint(equalToConstant: 32).isActive = true
+
+        
+        
+        signupTextLabel.centerXAnchor.constraint(equalTo: signupView.centerXAnchor).isActive = true
+        signupTextLabel.topAnchor.constraint(equalTo: sginupTitleUILable.bottomAnchor, constant: bd.height * 0.05).isActive = true
+        signupTextLabel.widthAnchor.constraint(equalTo: signupView.widthAnchor).isActive = true
+        signupTextLabelHeightAnchor = signupTextLabel.heightAnchor.constraint(equalToConstant: 24)
+        signupTextLabelHeightAnchor?.isActive = true
+        
+        
+        profileImageView.centerXAnchor.constraint(equalTo: signupView.centerXAnchor).isActive = true
+        profileImageView.topAnchor.constraint(equalTo: signupTextLabel.bottomAnchor, constant: bd.height * 0.4).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: bd.width * 0.4 ).isActive = true
+        profileImageViewHeightAnchor = profileImageView.heightAnchor.constraint(equalTo: profileImageView.widthAnchor)
         profileImageViewHeightAnchor?.isActive = true
+        
+        
+        signupButton.centerXAnchor.constraint(equalTo: signupView.centerXAnchor).isActive = true
+        signupButton.topAnchor.constraint(equalTo: signupInputsContainerView.bottomAnchor, constant: bd.height * 0.25).isActive = true
+        signupButton.widthAnchor.constraint(equalTo: signupInputsContainerView.widthAnchor).isActive = true
+        signupButton.heightAnchor.constraint(equalToConstant: bd.height * 0.89).isActive = true
+
+
     }
     
-    var inpputsContainerViewHeightAnchor: NSLayoutConstraint?
-    var nameTextFieldHeightAnchor : NSLayoutConstraint?
-    var emailTextFieldHeightAnchor : NSLayoutConstraint?
-    var passwordTextFieldHeightAnchor : NSLayoutConstraint?
+    
+    var socialButtonContainerViewHeightAnchor : NSLayoutConstraint?
+    
+    func setupSocialButtonContainerView(){
+        socialButtonContainerView.centerXAnchor.constraint(equalTo: loginView.centerXAnchor).isActive = true
+        socialButtonContainerView.topAnchor.constraint(equalTo: loginTitleUILable.bottomAnchor, constant: bd.height * 0.05).isActive = true
+        socialButtonContainerView.widthAnchor.constraint(equalToConstant: bd.width * 0.9).isActive = true
+        socialButtonContainerViewHeightAnchor = socialButtonContainerView.heightAnchor.constraint(equalToConstant: bd.height * 3.8)
+        socialButtonContainerViewHeightAnchor?.isActive = true
 
-    func setupInputsContainerView(){
+        
+        socialButtonContainerView.addSubview(socialLoginTextLabel)
+        socialButtonContainerView.addSubview(FBLoginButton)
+        socialButtonContainerView.addSubview(twitterLoginButton)
+        socialButtonContainerView.addSubview(googleLoginButton)
+        socialButtonContainerView.addSubview(socialSeparatorView)
+        socialButtonContainerView.addSubview(socialSeparatorLabel)
+        
+        
+        //need x, y, w, h, constraints
+        socialLoginTextLabel.centerXAnchor.constraint(equalTo: socialButtonContainerView.centerXAnchor).isActive = true
+        socialLoginTextLabel.topAnchor.constraint(equalTo: socialButtonContainerView.topAnchor).isActive = true
+        socialLoginTextLabel.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        socialLoginTextLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
+
+        
+        FBLoginButton.centerXAnchor.constraint(equalTo: socialButtonContainerView.centerXAnchor).isActive = true
+        FBLoginButton.bottomAnchor.constraint(equalTo: twitterLoginButton.topAnchor, constant: -4).isActive = true
+        FBLoginButton.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        FBLoginButton.heightAnchor.constraint(equalTo: twitterLoginButton.heightAnchor).isActive = true
+        
+        twitterLoginButton.centerXAnchor.constraint(equalTo: socialButtonContainerView.centerXAnchor).isActive = true
+        twitterLoginButton.centerYAnchor.constraint(equalTo: socialButtonContainerView.centerYAnchor).isActive = true
+        twitterLoginButton.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        twitterLoginButton.heightAnchor.constraint(equalToConstant: bd.height * 0.6).isActive = true
+
+        googleLoginButton.centerXAnchor.constraint(equalTo: socialButtonContainerView.centerXAnchor).isActive = true
+        googleLoginButton.topAnchor.constraint(equalTo: twitterLoginButton.bottomAnchor, constant: 4).isActive = true
+        googleLoginButton.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        googleLoginButton.heightAnchor.constraint(equalTo: twitterLoginButton.heightAnchor).isActive = true
+
+        socialSeparatorView.leftAnchor.constraint(equalTo: socialButtonContainerView.leftAnchor).isActive = true
+        socialSeparatorView.bottomAnchor.constraint(equalTo: socialButtonContainerView.bottomAnchor, constant: -4).isActive = true
+        socialSeparatorView.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        socialSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        
+        socialSeparatorLabel.centerXAnchor.constraint(equalTo: socialSeparatorView.centerXAnchor).isActive = true
+        socialSeparatorLabel.centerYAnchor.constraint(equalTo: socialSeparatorView.centerYAnchor, constant: -2).isActive = true
+        socialSeparatorLabel.widthAnchor.constraint(equalToConstant: bd.width * 0.13).isActive = true
+        socialSeparatorLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+
+
+    }
+    
+    func setupLoginInputsContainerView(){
+        
         //ned x, y, width, height constraints
+        loginInputsContainerView.centerXAnchor.constraint(equalTo: loginView.centerXAnchor).isActive = true
+        loginInputsContainerView.topAnchor.constraint(equalTo: socialButtonContainerView.bottomAnchor, constant: bd.height * 0.76).isActive = true
+        loginInputsContainerView.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        loginInputsContainerView.heightAnchor.constraint(equalToConstant: bd.height * 1.6).isActive = true
         
-        inputsContainerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        inputsContainerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 37).isActive = true
-        inputsContainerView.widthAnchor.constraint(equalTo: view.widthAnchor, constant: -24).isActive = true
-        inpputsContainerViewHeightAnchor = inputsContainerView.heightAnchor.constraint(equalToConstant: 100)
-        inpputsContainerViewHeightAnchor?.isActive = true
         
-        inputsContainerView.addSubview(nameTextField)
-        inputsContainerView.addSubview(nameSeparatorView)
-        inputsContainerView.addSubview(emailTextField)
-        inputsContainerView.addSubview(emailSeparatorView)
-        inputsContainerView.addSubview(passwordTextField)
+        loginInputsContainerView.addSubview(loginEmailTextField)
+        loginInputsContainerView.addSubview(loginEmailSeparatorView)
+        loginInputsContainerView.addSubview(loginPasswordTextField)
+        
         
         //ned x, y, width, height constraints
-        nameTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: inputsContainerView.topAnchor).isActive = true
-        nameTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        nameTextFieldHeightAnchor = nameTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 0)
-        nameTextFieldHeightAnchor?.isActive = true
+        loginEmailTextField.centerXAnchor.constraint(equalTo: loginInputsContainerView.centerXAnchor).isActive = true
+        loginEmailTextField.topAnchor.constraint(equalTo: loginInputsContainerView.topAnchor).isActive = true
+        loginEmailTextField.widthAnchor.constraint(equalTo: loginInputsContainerView.widthAnchor, multiplier: 0.9).isActive = true
+        loginEmailTextField.heightAnchor.constraint(equalTo: loginInputsContainerView.heightAnchor, multiplier: 0.5).isActive = true
         
-        nameSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
-        nameSeparatorView.bottomAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-        nameSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        nameSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        loginEmailSeparatorView.centerXAnchor.constraint(equalTo: loginInputsContainerView.centerXAnchor).isActive = true
+        loginEmailSeparatorView.topAnchor.constraint(equalTo: loginEmailTextField.bottomAnchor).isActive = true
+        loginEmailSeparatorView.widthAnchor.constraint(equalTo: loginInputsContainerView.widthAnchor, multiplier : 0.97).isActive = true
+        loginEmailSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
         
-        emailTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-        emailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor).isActive = true
-        emailTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        emailTextFieldHeightAnchor = emailTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2)
-        emailTextFieldHeightAnchor?.isActive = true
-        
-        emailSeparatorView.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor).isActive = true
-        emailSeparatorView.bottomAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
-        emailSeparatorView.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        emailSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
-
-        passwordTextField.leftAnchor.constraint(equalTo: inputsContainerView.leftAnchor, constant: 12).isActive = true
-        passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor).isActive = true
-        passwordTextField.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        passwordTextFieldHeightAnchor = passwordTextField.heightAnchor.constraint(equalTo: inputsContainerView.heightAnchor, multiplier: 1/2)
-        passwordTextFieldHeightAnchor?.isActive = true
-
+        loginPasswordTextField.centerXAnchor.constraint(equalTo: loginInputsContainerView.centerXAnchor).isActive = true
+        loginPasswordTextField.topAnchor.constraint(equalTo: loginEmailTextField.bottomAnchor).isActive = true
+        loginPasswordTextField.widthAnchor.constraint(equalTo: loginEmailTextField.widthAnchor).isActive = true
+        loginPasswordTextField.heightAnchor.constraint(equalTo: loginInputsContainerView.heightAnchor, multiplier: 0.5).isActive = true
         
     }
     
-    func setupLoginRegisterButton(){
+    func setupSignupInputsContainerView(){
         //ned x, y, width, height constraints
+        signupInputsContainerView.centerXAnchor.constraint(equalTo: signupView.centerXAnchor).isActive = true
+        signupInputsContainerView.topAnchor.constraint(equalTo: profileImageView.bottomAnchor, constant: bd.height * 0.3).isActive = true
+        signupInputsContainerView.widthAnchor.constraint(equalTo: socialButtonContainerView.widthAnchor).isActive = true
+        signupInputsContainerView.heightAnchor.constraint(equalToConstant: bd.height * 2.4).isActive = true
         
-        loginRegisterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginRegisterButton.centerYAnchor.constraint(equalTo: inputsContainerView.bottomAnchor, constant: 34).isActive = true
-        loginRegisterButton.widthAnchor.constraint(equalTo: inputsContainerView.widthAnchor).isActive = true
-        loginRegisterButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        signupInputsContainerView.addSubview(signupNameTextField)
+        signupInputsContainerView.addSubview(signupNameSeparatorView)
+        signupInputsContainerView.addSubview(signupEmailTextField)
+        signupInputsContainerView.addSubview(signupEmailSeparatorView)
+        signupInputsContainerView.addSubview(signupPasswordTextField)
+        
+        
+        //ned x, y, width, height constraints
+        signupNameTextField.centerXAnchor.constraint(equalTo: signupInputsContainerView.centerXAnchor).isActive = true
+        signupNameTextField.topAnchor.constraint(equalTo: signupInputsContainerView.topAnchor).isActive = true
+        signupNameTextField.widthAnchor.constraint(equalTo: signupInputsContainerView.widthAnchor, multiplier: 0.9).isActive = true
+        signupNameTextField.heightAnchor.constraint(equalTo: signupInputsContainerView.heightAnchor, multiplier: 1/3).isActive = true
+        
+        signupNameSeparatorView.centerXAnchor.constraint(equalTo: signupInputsContainerView.centerXAnchor).isActive = true
+        signupNameSeparatorView.topAnchor.constraint(equalTo: signupNameTextField.bottomAnchor).isActive = true
+        signupNameSeparatorView.widthAnchor.constraint(equalTo: signupInputsContainerView.widthAnchor, multiplier : 0.97).isActive = true
+        signupNameSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+
+        
+        signupEmailTextField.centerXAnchor.constraint(equalTo: signupInputsContainerView.centerXAnchor).isActive = true
+        signupEmailTextField.centerYAnchor.constraint(equalTo: signupInputsContainerView.centerYAnchor).isActive = true
+        signupEmailTextField.widthAnchor.constraint(equalTo: signupInputsContainerView.widthAnchor, multiplier: 0.9).isActive = true
+        signupEmailTextField.heightAnchor.constraint(equalTo: signupInputsContainerView.heightAnchor, multiplier: 1/3).isActive = true
+        
+        signupEmailSeparatorView.centerXAnchor.constraint(equalTo: signupInputsContainerView.centerXAnchor).isActive = true
+        signupEmailSeparatorView.topAnchor.constraint(equalTo: signupEmailTextField.bottomAnchor).isActive = true
+        signupEmailSeparatorView.widthAnchor.constraint(equalTo: signupInputsContainerView.widthAnchor, multiplier : 0.97).isActive = true
+        signupEmailSeparatorView.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+        
+        signupPasswordTextField.centerXAnchor.constraint(equalTo: signupInputsContainerView.centerXAnchor).isActive = true
+        signupPasswordTextField.topAnchor.constraint(equalTo: signupEmailTextField.bottomAnchor).isActive = true
+        signupPasswordTextField.widthAnchor.constraint(equalTo: signupEmailTextField.widthAnchor).isActive = true
+        signupPasswordTextField.heightAnchor.constraint(equalTo: signupInputsContainerView.heightAnchor, multiplier: 1/3).isActive = true
         
     }
-    
 
+    
+    
+    func setupKeyboardObservers(){
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: .UIKeyboardWillShow, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: .UIKeyboardWillHide, object: nil)
+        
+    }
+    func handleKeyboardWillShow(notification: NSNotification){
+        let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
+        
+        if islogin {
+            socialButtonContainerView.isHidden = true
+            socialButtonContainerViewHeightAnchor?.constant = 0
+            UIView.animate(withDuration: keyboardDuration!, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }else{
+            signupTextLabel.isHidden = true
+            signupTextLabelHeightAnchor?.constant = 0
+            signupTitleUILableCenterYAnchor?.constant = bd.height * 0.9
+            profileImageViewHeightAnchor?.constant = -profileImageView.frame.width
+            profileImageView.isHidden = true
+            UIView.animate(withDuration: keyboardDuration!, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+
+    }
+    func handleKeyboardWillHide(notification: NSNotification) {
+        
+        let keyboardDuration = (notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as AnyObject).doubleValue
+        if islogin{
+            socialButtonContainerViewHeightAnchor?.constant = bd.height * 3.8
+            UIView.animate(withDuration: keyboardDuration!, animations: {
+                self.view.layoutIfNeeded()
+            }, completion: { (bool) in
+                self.socialButtonContainerView.isHidden = false
+            })
+        }else{
+            signupTextLabelHeightAnchor?.constant = 24
+            signupTitleUILableCenterYAnchor?.constant = bd.height
+            signupTextLabel.isHidden = false
+            profileImageViewHeightAnchor?.constant = 0
+            self.profileImageView.isHidden = false
+
+            UIView.animate(withDuration: keyboardDuration!, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+
+    }
+
+    func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!){
+        
+    }
+
+    func loginButtonDidLogOut(_ loginButton: FBSDKLoginButton!) {
+        print("Did log out of facebook")
+    }
     
     override var preferredStatusBarStyle: UIStatusBarStyle{
         return .lightContent
     }
+
     
 
 }

@@ -304,8 +304,8 @@ class MessagesController: UITableViewController {
         }
         
         
-        let loginController = LoginController()
-        loginController.messagesController = self
+        let loginController = NewUIDesginViewController()
+//        loginController.messagesController = self
         present(loginController, animated: true, completion: nil)
     }
 

@@ -36,11 +36,35 @@ class ViewController: UIViewController, FBSDKLoginButtonDelegate, GIDSignInUIDel
             
             //lets login with Firebase
             self.handleTwitterRegister(session: session!)
-            
         }
         
         twitterButton.frame = CGRect(x: 16, y: 212 + 66 + 66 + 66, width: view.frame.width - 32, height: 50)
         view.addSubview(twitterButton)
+        
+        
+        //add our custom TWTR login button here
+        let customTWTRButton = UIButton()
+        customTWTRButton.backgroundColor = .blue
+        customTWTRButton.frame = CGRect(x: 16, y: 212 + 66 + 66 + 66 + 66, width: view.frame.width - 32, height: 50)
+        customTWTRButton.setTitle("Custom TWTR Login here", for: .normal)
+        customTWTRButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        view.addSubview(customTWTRButton)
+        
+        customTWTRButton.addTarget(self, action: #selector(handleCustomTWTRLogin), for: .touchUpInside)
+
+    }
+    
+    func handleCustomTWTRLogin(){
+        Twitter.sharedInstance().logIn { (session, error) in
+            if let err = error{
+                print("Failed to login via Twitter: ", err)
+                return
+            }
+            print("Successfully logged in under Twitter")
+            
+            //lets login with Firebase
+            self.handleTwitterRegister(session: session!)
+        }
     }
     
     fileprivate func setupGoogleButtons(){

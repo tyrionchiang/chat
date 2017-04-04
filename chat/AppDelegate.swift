@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate {
         window?.tintColor = UIColor(r: 184, g: 153, b: 129)
         window?.backgroundColor = UIColor(r: 245, g: 245, b: 245)
         window?.makeKeyAndVisible()
-        window?.rootViewController = UINavigationController(rootViewController: ViewController())
+        window?.rootViewController = UINavigationController(rootViewController: MessagesController())
         // Override point for customization after application launch.
         
         FIRApp.configure()

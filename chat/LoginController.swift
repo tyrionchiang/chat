@@ -224,6 +224,7 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
         
         guard let email = loginEmailTextField.text, let password = loginPasswordTextField.text else {
             print("Form is not value")
+            self.activityIncidatorViewAnimating(animated: false)
             return
         }
         FIRAuth.auth()?.signIn(withEmail: email, password: password, completion: { (user, error) in
@@ -373,14 +374,6 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        GIDSignIn.sharedInstance().signOut()
-        FBSDKLoginManager().logOut()
-        if let TWTRUserID = Twitter.sharedInstance().sessionStore.session()?.userID{
-            print("Logout",TWTRUserID)
-            Twitter.sharedInstance().sessionStore.logOutUserID(TWTRUserID)
-        }
-        
         
         view.addSubview(loginView)
         view.addSubview(signupView)
@@ -441,6 +434,7 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
     
     var islogin : Bool = true
     func handleLoginViewTap() {
+        view.endEditing(true)
         if !islogin {
             islogin = !islogin
             loginViewHeightAnchor?.constant = bd.height * 10
@@ -458,9 +452,9 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
                 self.view.layoutIfNeeded()
             })
         }
-        view.endEditing(true)
     }
     func handleSignupViewTap() {
+        view.endEditing(true)
         if islogin{
             islogin = !islogin
             loginViewHeightAnchor?.constant =  bd.height * 2
@@ -479,7 +473,6 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
 
             })
         }
-        view.endEditing(true)
     }
     
     var signupTitleUILableCenterYAnchor: NSLayoutConstraint?
@@ -738,6 +731,13 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
         return .lightContent
     }
 
-    
+    func socialAccountLogOut(){
+        GIDSignIn.sharedInstance().signOut()
+        FBSDKLoginManager().logOut()
+        if let TWTRUserID = Twitter.sharedInstance().sessionStore.session()?.userID{
+            print("Logout",TWTRUserID)
+            Twitter.sharedInstance().sessionStore.logOutUserID(TWTRUserID)
+        }
+    }
 
 }

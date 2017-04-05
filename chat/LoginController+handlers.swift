@@ -24,6 +24,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         
         guard let email = signupEmailTextField.text, let password = signupPasswordTextField.text, let name = signupNameTextField.text else {
             print("Form is not valid")
+            self.activityIncidatorViewAnimating(animated: false)
             return
         }
         
@@ -36,6 +37,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             
             
             guard let uid = user?.uid else{
+                self.activityIncidatorViewAnimating(animated: false)
                 return
             }
             
@@ -85,10 +87,11 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             let user = User()
             user.setValuesForKeys(values)
             
-            self.messagesController?.setupNavBarWithUser(user: user)
-            self.activityIncidatorViewAnimating(animated: false)
-
-            self.dismiss(animated: true, completion: nil)
+            self.successfullyLogged()
+//            self.messagesController?.setupNavBarWithUser(user: user)
+//            self.activityIncidatorViewAnimating(animated: false)
+//
+//            self.dismiss(animated: true, completion: nil)
 
         }
     }
@@ -173,18 +176,27 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     
     func handleTwitterRegister( session: TWTRSession? ){
         
-        guard let token = session?.authToken else {return}
-        guard let secret = session?.authTokenSecret else {return}
+        activityIncidatorViewAnimating(animated: true)
+        
+        guard let token = session?.authToken else {
+            self.activityIncidatorViewAnimating(animated: false)
+            return}
+        guard let secret = session?.authTokenSecret else {
+            self.activityIncidatorViewAnimating(animated: false)
+            return}
         
         let credentials = FIRTwitterAuthProvider.credential(withToken: token, secret: secret)
         FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
             if let err = error{
                 print("Failed to login to Firbase with Twitter: ", err)
+                self.activityIncidatorViewAnimating(animated: false)
                 return
             }
             print("Successfully logged in with our Twitter user: ")
             
-            guard let uid = user?.uid else{return}
+            guard let uid = user?.uid else{
+                self.activityIncidatorViewAnimating(animated: false)
+                return}
             
             let checkUserExistRef = FIRDatabase.database().reference().child("users")
             checkUserExistRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -195,7 +207,9 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                     
                 }else{
                     print("user doesn't exist, add user into database")
-                    guard let name = user?.displayName, let userName = session?.userName else {return}
+                    guard let name = user?.displayName, let userName = session?.userName else {
+                        self.activityIncidatorViewAnimating(animated: false)
+                        return}
                     let email = "@" + userName
                     
                     let profileImageUrl = "https://twitter.com/\(userName)/profile_image?size=bigger"
@@ -209,14 +223,20 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     
     func handleGoogleRegister(user : GIDGoogleUser){
 
+        activityIncidatorViewAnimating(animated: true)
         
-        guard let idToken = user.authentication.idToken else {return}
-        guard let accessToken = user.authentication.accessToken else {return}
+        guard let idToken = user.authentication.idToken else {
+            self.activityIncidatorViewAnimating(animated: false)
+            return}
+        guard let accessToken = user.authentication.accessToken else {
+            self.activityIncidatorViewAnimating(animated: false)
+            return}
         
         let credentials = FIRGoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
         FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
             if let err = error{
                 print("Failed to creat a FirbaseUser with Google account: ", err)
+                self.activityIncidatorViewAnimating(animated: false)
                 return
             }
             print("Successfully logged in with our Google user: ")
@@ -233,7 +253,9 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                 }else{
                     print("user doesn't exist, add user into database")
                     
-                    guard let name = user?.displayName, let email = user?.email,  let profileImageUrl = user?.photoURL?.absoluteString else {return}
+                    guard let name = user?.displayName, let email = user?.email,  let profileImageUrl = user?.photoURL?.absoluteString else {
+                        self.activityIncidatorViewAnimating(animated: false)
+                        return}
                     
                     let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
                     self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
@@ -244,8 +266,11 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     
     func handleFBRegister(){
 
+        activityIncidatorViewAnimating(animated: true)
+        
         let accessToken = FBSDKAccessToken.current()
         guard let accessTokenString = accessToken?.tokenString else{
+            self.activityIncidatorViewAnimating(animated: false)
             return
         }
         
@@ -253,6 +278,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         FIRAuth.auth()?.signIn(with: credentials, completion: { (user, error) in
             if error != nil{
                 print("Something went wrong with our FB user: ", error!)
+                self.activityIncidatorViewAnimating(animated: false)
                 return
             }
             print("Successfully logged in with our FB user: ")
@@ -272,6 +298,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                     FBSDKGraphRequest(graphPath: "/me", parameters: nil).start { (connection, result, err) in
                         if err != nil{
                             print("Failed to start graph request", err!)
+                            self.activityIncidatorViewAnimating(animated: false)
                             return
                         }
                         
@@ -279,7 +306,10 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
                             
                             let profileImageUrl = "https://graph.facebook.com/\(data["id"] as! String)/picture?type=large"
                             
-                            guard let name = user?.displayName, let email = user?.email else{return}
+                            guard let name = user?.displayName, let email = user?.email else{
+                                self.activityIncidatorViewAnimating(animated: false)
+                                return
+                            }
                             
                             let values = ["name" : name, "email" : email, "profileImageUrl": profileImageUrl]
                             self.registerUserIntoDatabaseWithUid(uid: uid, values: values as [String : AnyObject] )
@@ -294,14 +324,22 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     func successfullyLogged(){
         //successfully logged in our user
         messagesController?.fetchUserAndSetupNavBarTitle()
-        
+
+        loginViewInitialization()
         activityIncidatorViewAnimating(animated: false)
         dismiss(animated: true, completion: nil)
         
         print("successfullyLogged")
 
     }
-    
+    func loginViewInitialization(){
+        loginEmailTextField.text = ""
+        loginPasswordTextField.text = ""
+        signupNameTextField.text = ""
+        signupEmailTextField.text = ""
+        signupPasswordTextField.text = ""
+        handleLoginViewTap()
+    }
     
 
     

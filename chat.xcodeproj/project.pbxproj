@@ -19,15 +19,14 @@
 		86AC58FA1DED2209004BEFC2 /* fina_font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58F91DED2209004BEFC2 /* fina_font.ttf */; };
 		86AC58FD1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */; };
 		86AC59001DED2BD6004BEFC2 /* Monthoers.otf in Resources */ = {isa = PBXBuildFile; fileRef = 86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */; };
+		86AE3CBF1E9E30BA0000BC08 /* Popover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86AE3CBE1E9E30BA0000BC08 /* Popover.swift */; };
 		86BDCF7C1E934981006AFD95 /* LoginController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BDCF7B1E934981006AFD95 /* LoginController+handlers.swift */; };
-		86BF30841E02CD16008C4367 /* extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BF30831E02CD16008C4367 /* extension.swift */; };
+		86BF30841E02CD16008C4367 /* uiColor+imageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BF30831E02CD16008C4367 /* uiColor+imageCache.swift */; };
 		86BF30861E02CD29008C4367 /* _LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BF30851E02CD29008C4367 /* _LoginController.swift */; };
 		86E8553F1DF568DE006B1A2F /* _LoginController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E8553E1DF568DE006B1A2F /* _LoginController+handlers.swift */; };
 		86FC5CF21DE722EA003D96A1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */; };
 		86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FC5CF31DE722EA003D96A1 /* MessagesController.swift */; };
-		86FC5CF71DE722EA003D96A1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CF51DE722EA003D96A1 /* Main.storyboard */; };
 		86FC5CF91DE722EA003D96A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CF81DE722EA003D96A1 /* Assets.xcassets */; };
-		86FC5CFC1DE722EA003D96A1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 86FC5CFA1DE722EA003D96A1 /* LaunchScreen.storyboard */; };
 		86FDC00E1E7FDBD5000D2BF2 /* _ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FDC00D1E7FDBD5000D2BF2 /* _ViewController.swift */; };
 		86FDC0121E839A91000D2BF2 /* _ViewController+handlers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86FDC0111E839A91000D2BF2 /* _ViewController+handlers.swift */; };
 /* End PBXBuildFile section */
@@ -45,16 +44,15 @@
 		86AC58F91DED2209004BEFC2 /* fina_font.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = fina_font.ttf; sourceTree = "<group>"; };
 		86AC58FB1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ZefaniStencil-Regular.otf"; sourceTree = "<group>"; };
 		86AC58FF1DED2BD6004BEFC2 /* Monthoers.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Monthoers.otf; sourceTree = "<group>"; };
+		86AE3CBE1E9E30BA0000BC08 /* Popover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Popover.swift; sourceTree = "<group>"; };
 		86BDCF7B1E934981006AFD95 /* LoginController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "LoginController+handlers.swift"; sourceTree = "<group>"; };
-		86BF30831E02CD16008C4367 /* extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension.swift; sourceTree = "<group>"; };
+		86BF30831E02CD16008C4367 /* uiColor+imageCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "uiColor+imageCache.swift"; sourceTree = "<group>"; };
 		86BF30851E02CD29008C4367 /* _LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _LoginController.swift; sourceTree = "<group>"; };
 		86E8553E1DF568DE006B1A2F /* _LoginController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "_LoginController+handlers.swift"; sourceTree = "<group>"; };
 		86FC5CEE1DE722EA003D96A1 /* chat.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = chat.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86FC5CF11DE722EA003D96A1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		86FC5CF31DE722EA003D96A1 /* MessagesController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesController.swift; sourceTree = "<group>"; };
-		86FC5CF61DE722EA003D96A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		86FC5CF81DE722EA003D96A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		86FC5CFB1DE722EA003D96A1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		86FC5CFD1DE722EA003D96A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		86FDC00D1E7FDBD5000D2BF2 /* _ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = _ViewController.swift; sourceTree = "<group>"; };
 		86FDC0111E839A91000D2BF2 /* _ViewController+handlers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "_ViewController+handlers.swift"; sourceTree = "<group>"; };
@@ -79,8 +77,6 @@
 			children = (
 				86A5CD771DEEBDFC00CCE842 /* GoogleService-Info.plist */,
 				86AC59011DED2BDE004BEFC2 /* font */,
-				86FC5CF51DE722EA003D96A1 /* Main.storyboard */,
-				86FC5CFA1DE722EA003D96A1 /* LaunchScreen.storyboard */,
 				86FC5CFD1DE722EA003D96A1 /* Info.plist */,
 			);
 			name = "supporting File";
@@ -98,7 +94,8 @@
 		8648494C1DF6D0600050F416 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				86BF30831E02CD16008C4367 /* extension.swift */,
+				86BF30831E02CD16008C4367 /* uiColor+imageCache.swift */,
+				86AE3CBE1E9E30BA0000BC08 /* Popover.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -266,10 +263,8 @@
 			files = (
 				86AC58FD1DED28A8004BEFC2 /* ZefaniStencil-Regular.otf in Resources */,
 				86A5CD781DEEBDFC00CCE842 /* GoogleService-Info.plist in Resources */,
-				86FC5CFC1DE722EA003D96A1 /* LaunchScreen.storyboard in Resources */,
 				86AC58FA1DED2209004BEFC2 /* fina_font.ttf in Resources */,
 				86FC5CF91DE722EA003D96A1 /* Assets.xcassets in Resources */,
-				86FC5CF71DE722EA003D96A1 /* Main.storyboard in Resources */,
 				86AC59001DED2BD6004BEFC2 /* Monthoers.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -345,9 +340,10 @@
 				86BF30861E02CD29008C4367 /* _LoginController.swift in Sources */,
 				8660059E1DF9439F00189F17 /* ChatLogController.swift in Sources */,
 				86FDC0121E839A91000D2BF2 /* _ViewController+handlers.swift in Sources */,
+				86AE3CBF1E9E30BA0000BC08 /* Popover.swift in Sources */,
 				8613DE451DF5203B00CA21A2 /* NewMessageController.swift in Sources */,
 				8646CD8E1DFD9A7300D169B3 /* Message.swift in Sources */,
-				86BF30841E02CD16008C4367 /* extension.swift in Sources */,
+				86BF30841E02CD16008C4367 /* uiColor+imageCache.swift in Sources */,
 				8613DE481DF52BA600CA21A2 /* User.swift in Sources */,
 				86FDC00E1E7FDBD5000D2BF2 /* _ViewController.swift in Sources */,
 				86FC5CF41DE722EA003D96A1 /* MessagesController.swift in Sources */,
@@ -361,25 +357,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		86FC5CF51DE722EA003D96A1 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				86FC5CF61DE722EA003D96A1 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		86FC5CFA1DE722EA003D96A1 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				86FC5CFB1DE722EA003D96A1 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		86FC5CFE1DE722EA003D96A1 /* Debug */ = {
@@ -488,11 +465,13 @@
 					"$(PROJECT_DIR)/chat",
 				);
 				INFOPLIST_FILE = chat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chuanchung.chat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -507,11 +486,13 @@
 					"$(PROJECT_DIR)/chat",
 				);
 				INFOPLIST_FILE = chat/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.chuanchung.chat;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 3.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

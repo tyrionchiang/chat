@@ -11,7 +11,6 @@ import Firebase
 
 class MessagesController: UITableViewController{
     
-    var loginController : LoginController?
     let cellId = "cellId"
     
     override func viewDidLoad() {
@@ -304,12 +303,13 @@ class MessagesController: UITableViewController{
             print(logoutError)
         }
         
-        loginController?.socialAccountLogOut()
-        loginController?.messagesController = self
-        present(loginController!, animated: true, completion: nil)
+        let loginController = LoginController()
+
+        loginController.socialAccountLogOut()
+        loginController.messagesController = self
+        present(loginController, animated: true, completion: nil)
     }
 
- 
 
 }
 

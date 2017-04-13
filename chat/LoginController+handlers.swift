@@ -12,7 +12,7 @@ import FBSDKCoreKit
 import GoogleSignIn
 import TwitterKit
 
-extension LoginController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+extension LoginController: UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate {
     
     
     func handleRegister(){
@@ -97,19 +97,85 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
     }
 
     
-    
-    
-    
-    
+
     func handleSelectProfileImageView() {
-        let picker = UIImagePickerController()
         
+        let alert:UIAlertController=UIAlertController(title: "Choose Image", message: nil, preferredStyle: UIAlertControllerStyle.actionSheet)
+//        alert.popoverPresentationController?.sourceView = view.
+//        alert.popoverPresentationController?.sourceRect =
+        
+        let cameraAction = UIAlertAction(title: "Camera", style: UIAlertActionStyle.default)
+        {
+            UIAlertAction in
+            self.openCamera()
+        }
+        let gallaryAction = UIAlertAction(title: "Gallary", style: UIAlertActionStyle.default)
+        {
+            UIAlertAction in
+            self.openGallary()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel)
+        {
+            UIAlertAction in
+        }
+        // Add the actions
+        alert.addAction(cameraAction)
+        alert.addAction(gallaryAction)
+        alert.addAction(cancelAction)
+        // Present the controller
+        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            alert.popoverPresentationController?.sourceView = view
+            alert.popoverPresentationController?.sourceRect = view.bounds
+//            alert.preferredContentSize = CGSize(width: 10, height: 10)
+            alert.popoverPresentationController?.permittedArrowDirections = UIPopoverArrowDirection.init(rawValue: 0)
+
+        }
+    
+        self.present(alert, animated: true, completion: nil)
+        
+    }
+    
+    func openCamera()
+    {
+        if(UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.camera))
+        {
+            let picker = UIImagePickerController()
+            picker.delegate = self
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+            present(picker, animated: true, completion: nil)
+        }
+        else
+        {
+            openGallary()
+        }
+    }
+    func openGallary()
+    {
+        let picker = UIImagePickerController()
+        picker.sourceType = UIImagePickerControllerSourceType.photoLibrary
         picker.delegate = self
         picker.allowsEditing = true
-        
-        
-        present(picker, animated: true, completion: nil)
+
+        if UIDevice.current.userInterfaceIdiom == .phone
+        {
+
+            present(picker, animated: true, completion: nil)
+        }
+        else
+        {
+            print("popOver in")
+            popover(pop: picker, size: CGSize(width: bd.width * 0.75, height: bd.height * 6), arch: view, Direction: UIPopoverArrowDirection.init(rawValue: 0))
+        }
     }
+    
+    
+    
+    func adaptivePresentationStyle(for controller:UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
+    
+
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
@@ -125,7 +191,7 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             profileImageView.image = selectedImage
         }
         
-        dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true, completion: nil)
         
     }
     
@@ -221,7 +287,11 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         })
     }
     
-    func handleGoogleRegister(user : GIDGoogleUser){
+    func handleGoogleRegister(notification:Notification){
+        //user : GIDGoogleUser
+        guard let user = notification.userInfo?["user"] as? GIDGoogleUser else{
+            return
+        }
 
         activityIncidatorViewAnimating(animated: true)
         
@@ -325,22 +395,24 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
         //successfully logged in our user
         messagesController?.fetchUserAndSetupNavBarTitle()
 
-        loginViewInitialization()
+//        loginViewInitialization()
         activityIncidatorViewAnimating(animated: false)
         dismiss(animated: true, completion: nil)
         
         print("successfullyLogged")
 
     }
-    func loginViewInitialization(){
-        loginEmailTextField.text = ""
-        loginPasswordTextField.text = ""
-        signupNameTextField.text = ""
-        signupEmailTextField.text = ""
-        signupPasswordTextField.text = ""
-        handleLoginViewTap()
-    }
+//    func loginViewInitialization(){
+//        loginEmailTextField.text = ""
+//        loginPasswordTextField.text = ""
+//        signupNameTextField.text = ""
+//        signupEmailTextField.text = ""
+//        signupPasswordTextField.text = ""
+//        handleLoginViewTap()
+//    }
     
-
+    
     
 }
+
+

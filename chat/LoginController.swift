@@ -17,6 +17,7 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
 
     var messagesController : MessagesController?
     
+    
     static let whiteColor = UIColor(r: 245, g: 245, b: 245)
     static let TextFieldColor = UIColor(r: 161, g: 170, b: 179)
     let bd = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.size.width, height: UIScreen.main.bounds.size.height / 12) //Basic Displacement
@@ -134,6 +135,7 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
     func handleCustomGoogleLogin(){
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().signIn()
+        NotificationCenter.default.addObserver(forName: Notification.Name(rawValue:"LoginControllerGoogleSignIn"), object:nil, queue:nil, using:handleGoogleRegister)
     }
     
     func sign(_ signIn: GIDSignIn!, dismiss viewController: UIViewController!) {
@@ -343,12 +345,10 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
         
         imageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleSelectProfileImageView)))
         imageView.isUserInteractionEnabled = true
+        imageView.isHidden = true
         
         return imageView
     }()
-
-    
-    
 
 
     let activityIncidatorView : UIActivityIndicatorView = {
@@ -450,6 +450,7 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
             loginPasswordTextField.text = ""
             UIView.animate(withDuration: 0.25, animations: {
                 self.view.layoutIfNeeded()
+                self.profileImageView.isHidden = true
             })
         }
     }
@@ -460,6 +461,7 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
             loginViewHeightAnchor?.constant =  bd.height * 2
             loginTitleUILabelYAnchor?.constant = bd.height
             signupTextLabel.isHidden = false
+            profileImageView.isHidden = false
             
             signupNameTextField.text = ""
             signupEmailTextField.text = ""
@@ -739,5 +741,5 @@ class LoginController: UIViewController, UIGestureRecognizerDelegate, FBSDKLogin
             Twitter.sharedInstance().sessionStore.logOutUserID(TWTRUserID)
         }
     }
-
+    
 }

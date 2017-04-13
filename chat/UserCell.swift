@@ -26,13 +26,15 @@ class UserCell:UITableViewCell{
                 let dateFormatter = DateFormatter()
                 if today - seconds < 60*60*24{
                     dateFormatter.dateFormat = "h:mm a"
+                }else if today - seconds < 60*60*24*7{
+                    dateFormatter.dateFormat = "EEE"
                 }else if today - seconds < 60*60*24*365{
-                    dateFormatter.dateFormat = "DD/MM"
+                    dateFormatter.dateFormat = "d MMM"
                 }else{
-                    dateFormatter.dateFormat = "DD/MM/YYYY"
+                    dateFormatter.dateFormat = "d MMM/YYYY"
                 }
                 timeLabel.text = dateFormatter.string(from: timestampDate)
-
+                print()
             }
             
         }

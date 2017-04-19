@@ -143,7 +143,15 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
             let picker = UIImagePickerController()
             picker.delegate = self
             picker.sourceType = UIImagePickerControllerSourceType.camera
+            picker.cameraDevice = UIImagePickerControllerCameraDevice.front
+            picker.allowsEditing = true
             present(picker, animated: true, completion: nil)
+
+//            if UIDevice.current.userInterfaceIdiom == .phone{
+//                present(picker, animated: true, completion: nil)
+//            }else{
+//                popover(pop: picker, arch: view, Direction: UIPopoverArrowDirection.init(rawValue: 0))
+//            }
         }
         else
         {
@@ -159,13 +167,12 @@ extension LoginController: UIImagePickerControllerDelegate, UINavigationControll
 
         if UIDevice.current.userInterfaceIdiom == .phone
         {
-
             present(picker, animated: true, completion: nil)
         }
         else
         {
             print("popOver in")
-            popover(pop: picker, size: CGSize(width: bd.width * 0.75, height: bd.height * 6), arch: view, Direction: UIPopoverArrowDirection.init(rawValue: 0))
+            popover(pop: picker, size: CGSize(width: 300, height: 500), arch: view, Direction: UIPopoverArrowDirection.init(rawValue: 0))
         }
     }
     

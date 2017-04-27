@@ -1,20 +1,25 @@
 # chat
 
 <p align = center>
+<br/><br/>
 <img src="http://i.giphy.com/3og0Iwt3b4gGDgQ8AE.gif" width = 550 />
+<br/><br/>
 </p>
 
 #
 <p>
+<br/><br/>
 <img width = 190, src = "http://i.imgur.com/tFZ2UhO.png"/>
 <br/>
 <img src="http://i.giphy.com/xUA7b9hZSMGP5AH5g4.gif" width = 200 />
 <img src = "http://i.imgur.com/bHgYeXc.png", width = 570px/>
+<br/><br/>
 </p>
 
 
 #
 <p>
+<br/><br/>
  <b>FireBase Database</b><br/>
 -message<br/>
 &nbsp;&nbsp;&nbsp;&nbsp; -(messageID)<br/>

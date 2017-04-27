@@ -1,10 +1,10 @@
 # chat
 
+<p align = center>
+<img src="http://i.giphy.com/3og0Iwt3b4gGDgQ8AE.gif" width = 550 />
+</p>
 
-<img src="http://i.giphy.com/3og0Iwt3b4gGDgQ8AE.gif" width = 800 align = center />
-
-
-
+#
 <p>
 <img width = 190, src = "http://i.imgur.com/tFZ2UhO.png"/>
 <br/>
@@ -13,7 +13,7 @@
 </p>
 
 
-
+#
 <p>
  <b>FireBase Database</b><br/>
 -message<br/>

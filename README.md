@@ -1,8 +1,8 @@
 # chat
 
 
-![Preview](http://i.giphy.com/xUA7b9hZSMGP5AH5g4.gif)
-
+![](http://i.giphy.com/xUA7b9hZSMGP5AH5g4.gif)
+<img src="https://camo.githubusercontent.com/..." data-canonical-src="http://i.giphy.com/xUA7b9hZSMGP5AH5g4.gif" width="200" height="400" />
 
 
 <p>

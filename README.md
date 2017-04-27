@@ -1,10 +1,17 @@
 # chat
 
+
+![Preview](http://i.giphy.com/xUA7b9hZSMGP5AH5g4.gif)
+
+
+
 <p>
 <img width = 120, src = "http://i.imgur.com/w1zrm8l.png"/>
 <img src = "http://i.imgur.com/bHgYeXc.png", style = "float:right; width:570px">
 </p>
-![Preview](http://i.giphy.com/xUA7b9hZSMGP5AH5g4.gif)
+
+
+
 
 
 #FireBase Database

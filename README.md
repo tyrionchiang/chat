@@ -14,21 +14,21 @@
 
 
 
-
-
-# FireBase Database
--message
-	-(messageID)
-		fromID : String
-		text : String
-		timestamp : NSNumber
-		toId : String
--user-messages
-	-(userID)
-		-(toUserID)
-			-(messagesID)
--users
-	-(userID)
-		email : String
-		name : String
-		profileImageUrl : String
+<p>
+ <b>FireBase Database</b><br/>
+-message<br/>
+&nbsp;&nbsp;-(messageID)<br/>
+&nbsp;&nbsp;fromID : String<br/>
+&nbsp;&nbsp;text : String<br/>
+&nbsp;&nbsp;timestamp : NSNumber<br/>
+&nbsp;&nbsp;toId : String<br/>
+-user-messages<br/>
+&nbsp;-(userID)<br/>
+&nbsp;&nbsp;&nbsp;-(toUserID)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;-(messagesID)<br/>
+-users<br/>
+&nbsp;-(userID)<br/>
+&nbsp;&nbsp;email : String<br/>
+&nbsp;&nbsp;name : String<br/>
+&nbsp;&nbsp;profileImageUrl : String<br/>
+		<p/>
